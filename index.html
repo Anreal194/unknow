@@ -26,21 +26,9 @@
             background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #feada6 100%);
         }
 
-        /* Nền Không Gian Mới: Đêm Hồng Ngọt Ngào */
+        /* Nền Đêm Hồng Ấm Cúng */
         .bg-romantic-night {
-            background: radial-gradient(circle at center, #4a1535 0%, #20081a 70%, #0d020a 100%);
-        }
-
-        /* Canvas Hiệu ứng Trái Tim / Bong Bóng Bay 2D */
-        #effects-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 10;
-            transition: opacity 1s ease;
+            background: radial-gradient(circle at center, #3b1028 0%, #1a0515 70%, #0a0108 100%);
         }
 
         /* Glow Effects */
@@ -72,7 +60,7 @@
             animation: flyInLetter 1.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
 
-        /* Thiết kế 3D cho Lá Thư Envelope */
+        /* Thiết kế Lá Thư Envelope */
         .envelope-wrapper {
             perspective: 1000px;
         }
@@ -145,31 +133,20 @@
             animation: spinSlow 4s linear infinite;
         }
 
-        /* CSS cho 10 bức ảnh trôi nổi mượt mà */
-        .floating-photo {
-            position: absolute;
-            width: 140px;
-            height: 105px;
-            object-fit: cover;
-            border: 3px solid #ffb6c1;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(255, 105, 180, 0.4);
-            transition: transform 0.3s ease;
-            animation: floatAround 12s ease-in-out infinite alternate;
+        /* CSS Cho 10 Khung Ảnh Lơ Lửng */
+        .photo-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: floatAnim 4s ease-in-out infinite alternate;
         }
-        @media (min-width: 640px) {
-            .floating-photo { width: 190px; height: 140px; }
-        }
-        .floating-photo:hover {
-            transform: scale(1.15) rotate(0deg) !important;
-            z-index: 50;
-            box-shadow: 0 15px 35px rgba(255, 20, 147, 0.7);
+        .photo-card:hover {
+            transform: scale(1.25) rotate(0deg) !important;
+            z-index: 50 !important;
+            box-shadow: 0 20px 40px rgba(244, 114, 182, 0.8);
         }
 
-        @keyframes floatAround {
-            0% { transform: translateY(0px) translateX(0px) rotate(-5deg); }
-            50% { transform: translateY(-20px) translateX(15px) rotate(5deg); }
-            100% { transform: translateY(0px) translateX(0px) rotate(-5deg); }
+        @keyframes floatAnim {
+            0% { transform: translateY(0px) rotate(var(--rot)); }
+            100% { transform: translateY(-12px) rotate(calc(var(--rot) + 3deg)); }
         }
 
         /* Tùy chỉnh thanh cuộn thiệp */
@@ -178,7 +155,7 @@
         ::-webkit-scrollbar-thumb { background: rgba(244,114,182,0.6); border-radius: 10px; }
     </style>
 </head>
-<body class="bg-gray-950 text-gray-800 overflow-hidden h-screen w-screen relative">
+<body class="bg-gray-950 text-gray-800 h-screen w-screen relative overflow-hidden">
 
     <!-- Thẻ Audio Phát Nhạc -->
     <audio id="bg-music" src="nhac.mp3" loop preload="auto"></audio>
@@ -188,9 +165,6 @@
         <i id="music-icon" class="fa-solid fa-compact-disc text-xl"></i>
         <span id="music-text" class="text-xs font-bold hidden md:inline">Phát nhạc</span>
     </button>
-
-    <!-- Canvas Hiệu ứng Trái Tim Bay 2D -->
-    <canvas id="effects-canvas"></canvas>
 
     <!-- ==================== MÀN 1: KHỞI ĐỘNG (HỎI HÔM NAY LÀ NGÀY GÌ) ==================== -->
     <section id="screen-1" class="relative z-20 w-full h-full flex flex-col justify-center items-center p-4 bg-pink-pink transition-all duration-700">
@@ -218,7 +192,7 @@
         </div>
     </section>
 
-    <!-- ==================== MÀN 2: KHÔNG GIAN HỒNG & LÁ THƯ ==================== -->
+    <!-- ==================== MÀN 2: CHUYỂN SANG KHÔNG GIAN HỒNG & LÁ THƯ ==================== -->
     <section id="screen-3" class="hidden fixed inset-0 z-20 w-full h-full flex flex-col items-center justify-center p-4 bg-romantic-night transition-opacity duration-1000">
         <div id="ready-card" class="max-w-lg w-full bg-white/10 backdrop-blur-xl border border-pink-400/30 p-8 rounded-3xl shadow-2xl text-center glow-pink transition-all duration-700">
             <div class="text-5xl text-pink-300 mb-4 animate-bounce">
@@ -228,7 +202,7 @@
                 Chính xác! Chào mừng bạn đến với không gian yêu thương ✨
             </h2>
             <p class="text-lg text-pink-100 mb-8 font-medium">
-                Bạn đã sẵn sàng để mở hộp quà đặc biệt chưa? 🎁✨
+                Bạn đã sẵn sàng để nhận món quà đặc biệt chưa? 🎁✨
             </p>
             <button onclick="startGalaxyGift()" class="px-8 py-4 bg-gradient-to-r from-pink-500 via-rose-500 to-purple-500 text-white font-bold text-lg rounded-full shadow-2xl btn-bounce glow-pink">
                 Tôi đã sẵn sàng! 🚀
@@ -291,11 +265,20 @@
         </div>
     </div>
 
-    <!-- ==================== MÀN 4: 10 ẢNH TRÔI NỔI XINH XẮN ==================== -->
-    <div id="floating-photos-container" class="hidden fixed inset-0 z-10 pointer-events-none overflow-hidden"></div>
+    <!-- ==================== MÀN 4: KHUNG HIỂN THỊ 10 ẢNH KỶ NIỆM ==================== -->
+    <div id="photos-screen" class="hidden fixed inset-0 z-10 bg-romantic-night overflow-y-auto p-4 md:p-8 flex flex-col items-center">
+        <h2 class="text-2xl md:text-3xl font-extrabold text-pink-200 mb-6 mt-4 text-center tracking-wide">
+            💖 10 Khoảnh Khắc Kỷ Niệm Của Đại Gia Đình 💖
+        </h2>
 
-    <div id="photo-instruction" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-30 bg-black/70 backdrop-blur-md px-6 py-3 rounded-full border border-pink-400/40 text-pink-200 text-xs md:text-sm text-center shadow-2xl animate-fade-in pointer-events-none">
-        ✨ <i>10 khoảnh khắc kỷ niệm đang bay lơ lửng xung quanh...</i>
+        <!-- Khung chứa 10 Ảnh xếp đẹp mắt -->
+        <div id="photos-grid" class="w-full max-w-6xl grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6 pb-20">
+            <!-- 10 Ảnh sẽ tự động tạo từ JavaScript -->
+        </div>
+
+        <div class="fixed bottom-4 left-1/2 -translate-x-1/2 z-30 bg-black/70 backdrop-blur-md px-6 py-2.5 rounded-full border border-pink-400/40 text-pink-200 text-xs md:text-sm text-center shadow-2xl pointer-events-none">
+            ✨ <i>Chạm hoặc di chuột vào từng bức ảnh để xem rõ hơn nhé!</i>
+        </div>
     </div>
 
 
@@ -331,57 +314,6 @@
                 }).catch(e => {});
             }
         }, { once: true });
-
-
-        /* ================= HIỆU ỨNG TRÁI TIM BAY 2D ================= */
-        const canvas = document.getElementById('effects-canvas');
-        const ctx = canvas.getContext('2d');
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        const elements = [];
-        for (let i = 0; i < 40; i++) {
-            elements.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                size: Math.random() * 14 + 8,
-                speedY: Math.random() * 1 + 0.5,
-                speedX: (Math.random() - 0.5) * 0.6,
-                opacity: Math.random() * 0.6 + 0.3,
-                color: Math.random() > 0.5 ? '#ffb6c1' : '#ff69b4'
-            });
-        }
-
-        let isEffectActive = true;
-        function drawEffects() {
-            if (!isEffectActive) return;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            elements.forEach(el => {
-                el.y -= el.speedY;
-                el.x += el.speedX;
-
-                if (el.y < -20) {
-                    el.y = canvas.height + 20;
-                    el.x = Math.random() * canvas.width;
-                }
-
-                ctx.save();
-                ctx.globalAlpha = el.opacity;
-                ctx.fillStyle = el.color;
-                ctx.font = `${el.size}px sans-serif`;
-                ctx.fillText('❤️', el.x, el.y);
-                ctx.restore();
-            });
-
-            requestAnimationFrame(drawEffects);
-        }
-        drawEffects();
 
         /* ================= MÀN 1: KIỂM TRA NGÀY 20/10 ================= */
         function checkScreen1(isCorrect) {
@@ -430,51 +362,51 @@
         }
 
         function closeLetterAndShowPhotos() {
-            // Tắt hiệu ứng trái tim bay màn đầu
-            isEffectActive = false;
-            const canvasEl = document.getElementById('effects-canvas');
-            if(canvasEl) canvasEl.style.opacity = '0';
-
             const modal = document.getElementById('letter-modal');
             modal.classList.add('opacity-0');
 
             setTimeout(() => {
                 modal.classList.add('hidden');
-                document.getElementById('letter-container').classList.add('hidden');
-                document.getElementById('photo-instruction').classList.remove('hidden');
+                document.getElementById('screen-3').classList.add('hidden');
+                
+                // Mở màn hình chứa 10 ảnh
+                const photosScreen = document.getElementById('photos-screen');
+                photosScreen.classList.remove('hidden');
 
-                // Hiển thị chính xác 10 ảnh trôi nổi
-                createFloatingPhotos();
+                render10Photos();
             }, 500);
         }
 
-        // Chỉ lấy đúng 10 ảnh (anh1.jpg đến anh10.jpg) trôi nổi tự do trên màn hình
-        function createFloatingPhotos() {
-            const container = document.getElementById('floating-photos-container');
-            container.classList.remove('hidden');
+        // Tải chính xác 10 ảnh từ anh1.jpg đến anh10.jpg
+        function render10Photos() {
+            const grid = document.getElementById('photos-grid');
+            grid.innerHTML = '';
+
+            const rotations = [-4, 3, -2, 5, -3, 4, -5, 2, -3, 4];
+            const delays = [0, 0.3, 0.6, 0.2, 0.5, 0.8, 0.1, 0.4, 0.7, 0.2];
 
             for (let i = 1; i <= 10; i++) {
-                const img = document.createElement('img');
-                img.src = `anh${i}.jpg`;
-                img.className = 'floating-photo pointer-events-auto';
+                const card = document.createElement('div');
+                card.className = 'photo-card bg-white/10 backdrop-blur-md p-2 md:p-3 rounded-2xl border-2 border-pink-300/50 shadow-xl cursor-pointer relative';
+                
+                const rot = rotations[(i - 1) % rotations.length];
+                const delay = delays[(i - 1) % delays.length];
+                
+                card.style.setProperty('--rot', `${rot}deg`);
+                card.style.animationDelay = `${delay}s`;
 
-                // Rải ngẫu nhiên vị trí trên màn hình
-                const randomX = Math.random() * (window.innerWidth - 180);
-                const randomY = Math.random() * (window.innerHeight - 180);
-                const randomDelay = Math.random() * 5;
-                const randomRotate = (Math.random() - 0.5) * 20;
+                card.innerHTML = `
+                    <div class="overflow-hidden rounded-xl w-full h-36 sm:h-44 md:h-48 bg-pink-900/40 relative">
+                        <img src="anh${i}.jpg" alt="Ảnh kỷ niệm ${i}" 
+                             class="w-full h-full object-cover rounded-xl transition-all duration-300 hover:scale-110"
+                             onerror="this.src='https://images.unsplash.com/photo-1518895949257-7621c3c786d7?q=80&w=400';">
+                    </div>
+                    <p class="text-center text-xs md:text-sm font-bold text-pink-200 mt-2">
+                        Kỷ niệm ${i} ❤️
+                    </p>
+                `;
 
-                img.style.left = `${randomX}px`;
-                img.style.top = `${randomY}px`;
-                img.style.animationDelay = `${randomDelay}s`;
-                img.style.transform = `rotate(${randomRotate}deg)`;
-
-                // Fallback nếu không tải được ảnh
-                img.onerror = () => {
-                    img.style.display = 'none';
-                };
-
-                container.appendChild(img);
+                grid.appendChild(card);
             }
         }
     </script>
