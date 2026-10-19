@@ -164,7 +164,7 @@
         <span id="music-text" class="text-xs font-bold hidden md:inline">Phát nhạc</span>
     </button>
 
-    <!-- Canvas Cánh Hoa Rơi Lả Tả (Tự động ẩn sau khi đóng thư) -->
+    <!-- Canvas Cánh Hoa Rơi Lả Tả -->
     <canvas id="petals-canvas"></canvas>
 
     <!-- Canvas 3D Thiên Hà -->
@@ -260,7 +260,7 @@
                 </div>
             </div>
 
-            <!-- Nút Đóng Thư (Tắt hoa rơi & Bay 38 ảnh) -->
+            <!-- Nút Đóng Thư -->
             <div class="mt-6 pt-4 border-t border-pink-200 text-center">
                 <button onclick="closeLetterAndShowPhotos()" class="px-8 py-3 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold rounded-full shadow-lg btn-bounce flex items-center gap-2 mx-auto">
                     Đóng thư lại 💝 <i class="fa-solid fa-xmark"></i>
@@ -269,9 +269,9 @@
         </div>
     </div>
 
-    <!-- ==================== MÀN 4: 38 ẢNH BAY KHẮP THIÊN HÀ ==================== -->
-    <div id="photo-instruction" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-20 bg-black/60 backdrop-blur-md px-6 py-3 rounded-full border border-pink-400/40 text-pink-200 text-xs md:text-sm text-center shadow-2xl animate-fade-in pointer-events-none">
-        ✨ <i>38 khoảnh khắc kỷ niệm của đại gia đình đang bay lơ lửng khắp thiên hà...</i>
+    <!-- ==================== MÀN 4: THÔNG BÁO TẢI ẢNH TRONG THIÊN HÀ ==================== -->
+    <div id="photo-instruction" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-20 bg-black/70 backdrop-blur-md px-6 py-3 rounded-full border border-pink-400/40 text-pink-200 text-xs md:text-sm text-center shadow-2xl animate-fade-in pointer-events-none">
+        ✨ <span id="loading-status">Đang tải 38 khoảnh khắc kỷ niệm vào thiên hà...</span>
     </div>
 
 
@@ -392,7 +392,7 @@
             }
         }
 
-        /* ================= THREE.JS GALAXY & 38 ẢNH (anh1.jpg - anh38.jpg) ================= */
+        /* ================= THREE.JS GALAXY & 38 ẢNH ================= */
         let scene, camera, renderer, starParticles;
         let photoMeshes = [];
         let isZoomingOut = false;
@@ -461,7 +461,6 @@
                 camera.position.z += 0.35;
             }
 
-            // Hiệu ứng 38 bức ảnh bay lượn hỗn loạn khắp thiên hà
             photoMeshes.forEach((mesh) => {
                 mesh.rotation.y += mesh.userData.rotSpeedY;
                 mesh.rotation.x += mesh.userData.rotSpeedX;
@@ -507,7 +506,6 @@
         }
 
         function closeLetterAndShowPhotos() {
-            // Tắt hoàn toàn hiệu ứng cánh hoa rơi 2D khi đóng thư
             isPetalsActive = false;
             const petalsEl = document.getElementById('petals-canvas');
             if(petalsEl) {
@@ -523,57 +521,85 @@
                 document.getElementById('letter-container').classList.add('hidden');
                 document.getElementById('photo-instruction').classList.remove('hidden');
 
-                // Tạo 38 bức ảnh bay trong không gian 3D
+                // Tiến hành tải 38 ảnh vào thiên hà 3D
                 createFloating3DPhotos();
             }, 500);
         }
 
-        // Tạo 38 bức ảnh bay rải rác xung quanh thiên hà
+        // Tải 38 ảnh với cơ chế đếm tiến độ và chống lỗi hiển thị
         function createFloating3DPhotos() {
             const textureLoader = new THREE.TextureLoader();
+            let loadedCount = 0;
+            const statusEl = document.getElementById('loading-status');
 
-            familyPhotoURLs.forEach((url) => {
+            familyPhotoURLs.forEach((url, index) => {
                 textureLoader.load(url, 
                     (texture) => {
-                        const geo = new THREE.PlaneGeometry(5, 3.8);
-                        const mat = new THREE.MeshBasicMaterial({
-                            map: texture,
-                            side: THREE.DoubleSide,
-                            transparent: true,
-                            opacity: 0.95
-                        });
-
-                        const mesh = new THREE.Mesh(geo, mat);
-
-                        // Phân bố bán kính rộng xung quanh tâm thiên hà
-                        const u = Math.random();
-                        const v = Math.random();
-                        const theta = u * 2.0 * Math.PI;
-                        const phi = Math.acos(2.0 * v - 1.0);
-                        const r = 14 + Math.random() * 26;
-
-                        mesh.position.x = r * Math.sin(phi) * Math.cos(theta);
-                        mesh.position.y = r * Math.sin(phi) * Math.sin(theta);
-                        mesh.position.z = r * Math.cos(phi);
-
-                        mesh.rotation.x = Math.random() * Math.PI;
-                        mesh.rotation.y = Math.random() * Math.PI;
-
-                        mesh.userData = {
-                            rotSpeedX: (Math.random() - 0.5) * 0.007,
-                            rotSpeedY: (Math.random() - 0.5) * 0.007,
-                            seed: Math.random() * 100
-                        };
-
-                        photoMeshes.push(mesh);
-                        scene.add(mesh);
+                        createPhotoMesh(texture, index + 1);
+                        loadedCount++;
+                        if(statusEl) {
+                            statusEl.innerText = `Đang tải ảnh vào thiên hà: ${loadedCount}/38`;
+                            if(loadedCount === 38) {
+                                statusEl.innerText = "✨ 38 khoảnh khắc kỷ niệm đang bay lơ lửng khắp thiên hà...";
+                            }
+                        }
                     },
                     undefined,
                     (err) => {
-                        console.log(`Không tìm thấy ảnh: ${url}`, err);
+                        // Nếu file nào lỗi, dùng khung dự phòng có chữ kèm số thứ tự để không bị mất khung ảnh
+                        console.log(`Lỗi tải ảnh: ${url}`);
+                        loadedCount++;
+                        const canvas = document.createElement('canvas');
+                        canvas.width = 512;
+                        canvas.height = 384;
+                        const ctx = canvas.getContext('2d');
+                        ctx.fillStyle = '#ff77a9';
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        ctx.fillStyle = '#ffffff';
+                        ctx.font = 'bold 40px sans-serif';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.fillText(`Kỷ niệm ${index + 1}`, canvas.width / 2, canvas.height / 2);
+
+                        const fallbackTexture = new THREE.CanvasTexture(canvas);
+                        createPhotoMesh(fallbackTexture, index + 1);
                     }
                 );
             });
+        }
+
+        function createPhotoMesh(texture, id) {
+            const geo = new THREE.PlaneGeometry(5, 3.8);
+            const mat = new THREE.MeshBasicMaterial({
+                map: texture,
+                side: THREE.DoubleSide,
+                transparent: true,
+                opacity: 1.0
+            });
+
+            const mesh = new THREE.Mesh(geo, mat);
+
+            const u = Math.random();
+            const v = Math.random();
+            const theta = u * 2.0 * Math.PI;
+            const phi = Math.acos(2.0 * v - 1.0);
+            const r = 16 + Math.random() * 24;
+
+            mesh.position.x = r * Math.sin(phi) * Math.cos(theta);
+            mesh.position.y = r * Math.sin(phi) * Math.sin(theta);
+            mesh.position.z = r * Math.cos(phi);
+
+            mesh.rotation.x = Math.random() * Math.PI;
+            mesh.rotation.y = Math.random() * Math.PI;
+
+            mesh.userData = {
+                rotSpeedX: (Math.random() - 0.5) * 0.007,
+                rotSpeedY: (Math.random() - 0.5) * 0.007,
+                seed: Math.random() * 100
+            };
+
+            photoMeshes.push(mesh);
+            scene.add(mesh);
         }
     </script>
 </body>
