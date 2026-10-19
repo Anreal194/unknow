@@ -42,6 +42,7 @@
             height: 100%;
             pointer-events: none;
             z-index: 999;
+            transition: opacity 1s ease;
         }
 
         /* Glow Effects */
@@ -154,7 +155,7 @@
 </head>
 <body class="bg-gray-950 text-gray-800 overflow-hidden h-screen w-screen relative">
 
-    <!-- Thẻ Audio Phát Nhạc (Đảm bảo file nhac.mp3 cùng thư mục) -->
+    <!-- Thẻ Audio Phát Nhạc -->
     <audio id="bg-music" src="nhac.mp3" loop preload="auto"></audio>
 
     <!-- Nút Bật/Tắt Nhạc Cố Định Góc Màn Hình -->
@@ -163,7 +164,7 @@
         <span id="music-text" class="text-xs font-bold hidden md:inline">Phát nhạc</span>
     </button>
 
-    <!-- Canvas Cánh Hoa Rơi Lả Tả (Xuyên suốt tất cả các màn) -->
+    <!-- Canvas Cánh Hoa Rơi Lả Tả (Tự động ẩn sau khi đóng thư) -->
     <canvas id="petals-canvas"></canvas>
 
     <!-- Canvas 3D Thiên Hà -->
@@ -212,7 +213,7 @@
             </button>
         </div>
 
-        <!-- Lá Thư Bay Từ Xa Lại (Ẩn ban đầu) -->
+        <!-- Lá Thư Bay Từ Xa Lại -->
         <div id="letter-container" class="hidden flex-col items-center justify-center z-20">
             <div class="envelope-wrapper glow-letter mb-6">
                 <div id="envelope" class="envelope" onclick="openEnvelope()">
@@ -259,7 +260,7 @@
                 </div>
             </div>
 
-            <!-- Nút Đóng Thư chuyển sang Màn 4 (38 ảnh bay) -->
+            <!-- Nút Đóng Thư (Tắt hoa rơi & Bay 38 ảnh) -->
             <div class="mt-6 pt-4 border-t border-pink-200 text-center">
                 <button onclick="closeLetterAndShowPhotos()" class="px-8 py-3 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold rounded-full shadow-lg btn-bounce flex items-center gap-2 mx-auto">
                     Đóng thư lại 💝 <i class="fa-solid fa-xmark"></i>
@@ -268,7 +269,7 @@
         </div>
     </div>
 
-    <!-- ==================== MÀN 4: 38 ẢNH BAY LOẠN XẠ TRONG THIÊN HÀ ==================== -->
+    <!-- ==================== MÀN 4: 38 ẢNH BAY KHẮP THIÊN HÀ ==================== -->
     <div id="photo-instruction" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-20 bg-black/60 backdrop-blur-md px-6 py-3 rounded-full border border-pink-400/40 text-pink-200 text-xs md:text-sm text-center shadow-2xl animate-fade-in pointer-events-none">
         ✨ <i>38 khoảnh khắc kỷ niệm của đại gia đình đang bay lơ lửng khắp thiên hà...</i>
     </div>
@@ -308,7 +309,7 @@
         }, { once: true });
 
 
-        /* ================= HIỆU ỨNG CÁNH HOA RƠI LẢ TẢ CHẬM 2D ================= */
+        /* ================= HIỆU ỨNG CÁNH HOA RƠI LẢ TẢ 2D ================= */
         const petalsCanvas = document.getElementById('petals-canvas');
         const pCtx = petalsCanvas.getContext('2d');
 
@@ -336,7 +337,9 @@
             });
         }
 
+        let isPetalsActive = true;
         function drawPetals() {
+            if (!isPetalsActive) return;
             pCtx.clearRect(0, 0, petalsCanvas.width, petalsCanvas.height);
             
             petals.forEach(p => {
@@ -389,12 +392,11 @@
             }
         }
 
-        /* ================= THREE.JS GALAXY & 38 ẢNH TỰ ĐỘNG (anh1.jpg - anh38.jpg) ================= */
+        /* ================= THREE.JS GALAXY & 38 ẢNH (anh1.jpg - anh38.jpg) ================= */
         let scene, camera, renderer, starParticles;
         let photoMeshes = [];
         let isZoomingOut = false;
 
-        // Tự động tạo danh sách 38 ảnh với tên anh1.jpg đến anh38.jpg
         const familyPhotoURLs = [];
         for (let i = 1; i <= 38; i++) {
             familyPhotoURLs.push(`anh${i}.jpg`);
@@ -411,7 +413,7 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-            const count = 3000;
+            const count = 3500;
             const geometry = new THREE.BufferGeometry();
             const positions = new Float32Array(count * 3);
             const colors = new Float32Array(count * 3);
@@ -419,9 +421,9 @@
             const palette = [new THREE.Color('#ffb6c1'), new THREE.Color('#ff69b4'), new THREE.Color('#e0b0ff'), new THREE.Color('#ffffff')];
 
             for (let i = 0; i < count; i++) {
-                positions[i * 3] = (Math.random() - 0.5) * 100;
-                positions[i * 3 + 1] = (Math.random() - 0.5) * 100;
-                positions[i * 3 + 2] = (Math.random() - 0.5) * 100;
+                positions[i * 3] = (Math.random() - 0.5) * 120;
+                positions[i * 3 + 1] = (Math.random() - 0.5) * 120;
+                positions[i * 3 + 2] = (Math.random() - 0.5) * 120;
 
                 const c = palette[Math.floor(Math.random() * palette.length)];
                 colors[i * 3] = c.r;
@@ -455,16 +457,16 @@
                 starParticles.rotation.x += 0.0004;
             }
 
-            if (isZoomingOut && camera.position.z < 65) {
+            if (isZoomingOut && camera.position.z < 55) {
                 camera.position.z += 0.35;
             }
 
-            // Làm 38 bức ảnh bay lượn xoay tròn lơ lửng trong không gian
+            // Hiệu ứng 38 bức ảnh bay lượn hỗn loạn khắp thiên hà
             photoMeshes.forEach((mesh) => {
                 mesh.rotation.y += mesh.userData.rotSpeedY;
                 mesh.rotation.x += mesh.userData.rotSpeedX;
-                mesh.position.y += Math.sin(Date.now() * 0.001 + mesh.userData.seed) * 0.01;
-                mesh.position.x += Math.cos(Date.now() * 0.0008 + mesh.userData.seed) * 0.008;
+                mesh.position.y += Math.sin(Date.now() * 0.001 + mesh.userData.seed) * 0.012;
+                mesh.position.x += Math.cos(Date.now() * 0.0008 + mesh.userData.seed) * 0.01;
             });
 
             renderer.render(scene, camera);
@@ -505,6 +507,14 @@
         }
 
         function closeLetterAndShowPhotos() {
+            // Tắt hoàn toàn hiệu ứng cánh hoa rơi 2D khi đóng thư
+            isPetalsActive = false;
+            const petalsEl = document.getElementById('petals-canvas');
+            if(petalsEl) {
+                petalsEl.style.opacity = '0';
+                setTimeout(() => petalsEl.remove(), 1000);
+            }
+
             const modal = document.getElementById('letter-modal');
             modal.classList.add('opacity-0');
 
@@ -513,18 +523,19 @@
                 document.getElementById('letter-container').classList.add('hidden');
                 document.getElementById('photo-instruction').classList.remove('hidden');
 
+                // Tạo 38 bức ảnh bay trong không gian 3D
                 createFloating3DPhotos();
             }, 500);
         }
 
-        // Tạo 38 bức ảnh bay lơ lửng trong không gian (anh1.jpg -> anh38.jpg)
+        // Tạo 38 bức ảnh bay rải rác xung quanh thiên hà
         function createFloating3DPhotos() {
             const textureLoader = new THREE.TextureLoader();
 
-            familyPhotoURLs.forEach((url, index) => {
+            familyPhotoURLs.forEach((url) => {
                 textureLoader.load(url, 
                     (texture) => {
-                        const geo = new THREE.PlaneGeometry(4.5, 3.4);
+                        const geo = new THREE.PlaneGeometry(5, 3.8);
                         const mat = new THREE.MeshBasicMaterial({
                             map: texture,
                             side: THREE.DoubleSide,
@@ -534,12 +545,12 @@
 
                         const mesh = new THREE.Mesh(geo, mat);
 
-                        // Phân bố rộng khắp không gian 3D
+                        // Phân bố bán kính rộng xung quanh tâm thiên hà
                         const u = Math.random();
                         const v = Math.random();
                         const theta = u * 2.0 * Math.PI;
                         const phi = Math.acos(2.0 * v - 1.0);
-                        const r = 15 + Math.random() * 30;
+                        const r = 14 + Math.random() * 26;
 
                         mesh.position.x = r * Math.sin(phi) * Math.cos(theta);
                         mesh.position.y = r * Math.sin(phi) * Math.sin(theta);
@@ -549,8 +560,8 @@
                         mesh.rotation.y = Math.random() * Math.PI;
 
                         mesh.userData = {
-                            rotSpeedX: (Math.random() - 0.5) * 0.008,
-                            rotSpeedY: (Math.random() - 0.5) * 0.008,
+                            rotSpeedX: (Math.random() - 0.5) * 0.007,
+                            rotSpeedY: (Math.random() - 0.5) * 0.007,
                             seed: Math.random() * 100
                         };
 
@@ -559,7 +570,7 @@
                     },
                     undefined,
                     (err) => {
-                        console.log(`Không tìm thấy file ảnh: ${url}`, err);
+                        console.log(`Không tìm thấy ảnh: ${url}`, err);
                     }
                 );
             });
