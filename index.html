@@ -133,12 +133,13 @@
             animation: spinSlow 4s linear infinite;
         }
 
-        /* Con trỏ nhấp nháy khi chạy chữ */
+        /* Con trỏ nhấp nháy khi đang gõ chữ */
         .typing-cursor::after {
             content: '|';
-            animation: blink 0.8s infinite;
+            animation: blink 0.7s infinite;
             color: #ec4899;
             font-weight: bold;
+            margin-left: 2px;
         }
         @keyframes blink {
             0%, 100% { opacity: 1; }
@@ -270,7 +271,7 @@
         </div>
     </section>
 
-    <!-- ==================== MÀN 3: THIỆP LỜI CHÚC CHẠY CHỮ TỪNG KÝ TỰ ==================== -->
+    <!-- ==================== MÀN 3: THIỆP CHẠY CHỮ TỪNG KÝ TỰ (RỐNG LÚC ĐẦU) ==================== -->
     <div id="letter-modal" class="hidden fixed inset-0 z-40 w-full h-full flex items-center justify-center p-4 bg-black/70 backdrop-blur-md transition-opacity duration-500 opacity-0">
         <div class="max-w-2xl w-full bg-gradient-to-b from-pink-50 via-white to-pink-100 p-6 md:p-10 rounded-3xl shadow-2xl border-4 border-pink-300 relative text-gray-800 my-auto max-h-[90vh] flex flex-col">
             
@@ -283,8 +284,8 @@
                     <div class="w-24 h-1 bg-pink-400 mx-auto my-3 rounded-full"></div>
                 </div>
 
-                <!-- Khung chứa nội dung chạy chữ -->
-                <div id="typing-text-container" class="space-y-4 text-gray-700 text-base md:text-lg leading-relaxed min-h-[180px]">
+                <!-- Khung trống hoàn toàn ban đầu để chạy từng chữ -->
+                <div id="typing-text-container" class="space-y-4 text-gray-700 text-base md:text-lg leading-relaxed min-h-[220px]">
                     <p id="line-1" class="typing-cursor"></p>
                     <p id="line-2"></p>
                     <p id="line-3"></p>
@@ -292,7 +293,7 @@
                 </div>
             </div>
 
-            <!-- Nút Đóng Thư (Ban đầu ẩn, chạy xong chữ mới hiện ra) -->
+            <!-- Nút Đóng Thư (Ban đầu ẩn hoàn toàn, gõ xong chữ mới hiện) -->
             <div id="close-letter-btn-container" class="mt-6 pt-4 border-t border-pink-200 text-center opacity-0 transition-opacity duration-700 pointer-events-none">
                 <button onclick="closeLetterAndShowPhotos()" class="px-8 py-3 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold rounded-full shadow-lg btn-bounce flex items-center gap-2 mx-auto">
                     Đóng thư lại 💝 <i class="fa-solid fa-xmark"></i>
@@ -301,7 +302,7 @@
         </div>
     </div>
 
-    <!-- ==================== MÀN 4: 38 ẢNH BAY VÀ RƠI ==================== -->
+    <!-- ==================== MÀN 4: 38 ẢNH VỪA BAY VỪA RƠI ==================== -->
     <div id="photos-screen" class="hidden fixed inset-0 z-10 bg-romantic-night overflow-hidden">
         <div id="photos-container" class="w-full h-full relative"></div>
 
@@ -386,13 +387,13 @@
                 modal.classList.remove('hidden');
                 setTimeout(() => {
                     modal.classList.remove('opacity-0');
-                    // Bắt đầu chạy hiệu ứng chữ
+                    // Kích hoạt chạy chữ ngay khi thư mở
                     startTypingEffect();
-                }, 50);
+                }, 100);
             }, 700);
         }
 
-        /* ================= HIỆU ỨNG CHẠY CHỮ TỪNG KÝ TỰ ================= */
+        /* ================= HIỆU ỨNG GÕ CHỮ TỪNG KÝ TỰ ================= */
         const textLines = [
             "🫶 Hôm nay là ngày 20/10, con chúc bà ngoại, má hai, mẹ, má tư và mợ có một ngày thật vui vẻ, không những ngày hôm nay mà còn cả những ngày phía trước.",
             "🌷 Con chúc đại gia đình mình luôn dồi dào sức khoẻ, bình an, ngập tràn niềm vui và lúc nào cũng xinh đẹp, rạng rỡ và hạnh phúc bên gia đình nhỏ của mình.",
@@ -400,7 +401,11 @@
             "Kí tên: Phuongg Thuyy ✨"
         ];
 
+        let isTypingDone = false;
+
         function startTypingEffect() {
+            if (isTypingDone) return;
+            
             let lineIndex = 0;
             let charIndex = 0;
 
@@ -411,19 +416,19 @@
                     if (charIndex < textLines[lineIndex].length) {
                         currentP.innerHTML += textLines[lineIndex].charAt(charIndex);
                         charIndex++;
-                        setTimeout(typeWriter, 22); // Tốc độ chạy chữ (nhỏ hơn là nhanh hơn)
+                        setTimeout(typeWriter, 28); // Tốc độ chạy chữ từng ký tự
                     } else {
-                        // Xóa con trỏ ở dòng cũ, chuyển sang dòng tiếp theo
                         currentP.classList.remove('typing-cursor');
                         lineIndex++;
                         charIndex = 0;
                         if (lineIndex < textLines.length) {
                             document.getElementById(`line-${lineIndex + 1}`).classList.add('typing-cursor');
                         }
-                        setTimeout(typeWriter, 300); // Khoảng nghỉ ngắn giữa các đoạn
+                        setTimeout(typeWriter, 350); // Khoảng dừng giữa các đoạn
                     }
                 } else {
-                    // Chạy xong hết chữ thì hiện nút đóng thư lên
+                    isTypingDone = true;
+                    // Hiện nút Đóng thư sau khi chạy xong toàn bộ nội dung
                     const btnContainer = document.getElementById('close-letter-btn-container');
                     btnContainer.classList.remove('opacity-0', 'pointer-events-none');
                 }
@@ -440,7 +445,7 @@
                 modal.classList.add('hidden');
                 document.getElementById('screen-3').classList.add('hidden');
                 
-                // Hiển thị màn hình ảnh
+                // Mở màn hình chứa 38 ảnh
                 const photosScreen = document.getElementById('photos-screen');
                 photosScreen.classList.remove('hidden');
 
