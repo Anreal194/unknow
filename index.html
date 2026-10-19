@@ -133,20 +133,45 @@
             animation: spinSlow 4s linear infinite;
         }
 
-        /* CSS Cho 10 Khung Ảnh Lơ Lửng */
-        .photo-card {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            animation: floatAnim 4s ease-in-out infinite alternate;
-        }
-        .photo-card:hover {
-            transform: scale(1.25) rotate(0deg) !important;
-            z-index: 50 !important;
-            box-shadow: 0 20px 40px rgba(244, 114, 182, 0.8);
+        /* Hiệu ứng ảnh rơi chậm từ trên xuống */
+        @keyframes fallDown {
+            0% {
+                transform: translateY(-150px) rotate(var(--rot-start));
+                opacity: 0;
+            }
+            15% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(110vh) rotate(var(--rot-end));
+                opacity: 0.9;
+            }
         }
 
-        @keyframes floatAnim {
-            0% { transform: translateY(0px) rotate(var(--rot)); }
-            100% { transform: translateY(-12px) rotate(calc(var(--rot) + 3deg)); }
+        .falling-photo {
+            position: absolute;
+            width: 130px;
+            height: 100px;
+            object-fit: cover;
+            border: 3px solid #ffb6c1;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(255, 105, 180, 0.5);
+            animation: fallDown var(--fall-duration) linear infinite;
+            animation-delay: var(--fall-delay);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        @media (min-width: 640px) {
+            .falling-photo {
+                width: 170px;
+                height: 130px;
+            }
+        }
+        .falling-photo:hover {
+            transform: scale(1.2) rotate(0deg) !important;
+            z-index: 100 !important;
+            box-shadow: 0 15px 35px rgba(255, 20, 147, 0.8);
+            animation-play-state: paused;
         }
 
         /* Tùy chỉnh thanh cuộn thiệp */
@@ -265,19 +290,12 @@
         </div>
     </div>
 
-    <!-- ==================== MÀN 4: KHUNG HIỂN THỊ 10 ẢNH KỶ NIỆM ==================== -->
-    <div id="photos-screen" class="hidden fixed inset-0 z-10 bg-romantic-night overflow-y-auto p-4 md:p-8 flex flex-col items-center">
-        <h2 class="text-2xl md:text-3xl font-extrabold text-pink-200 mb-6 mt-4 text-center tracking-wide">
-            💖 10 Khoảnh Khắc Kỷ Niệm Của Đại Gia Đình 💖
-        </h2>
-
-        <!-- Khung chứa 10 Ảnh xếp đẹp mắt -->
-        <div id="photos-grid" class="w-full max-w-6xl grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6 pb-20">
-            <!-- 10 Ảnh sẽ tự động tạo từ JavaScript -->
-        </div>
+    <!-- ==================== MÀN 4: 38 ẢNH RƠI CHẬM TỪ TRÊN XUỐNG ==================== -->
+    <div id="falling-photos-screen" class="hidden fixed inset-0 z-10 bg-romantic-night overflow-hidden">
+        <div id="falling-container" class="w-full h-full relative"></div>
 
         <div class="fixed bottom-4 left-1/2 -translate-x-1/2 z-30 bg-black/70 backdrop-blur-md px-6 py-2.5 rounded-full border border-pink-400/40 text-pink-200 text-xs md:text-sm text-center shadow-2xl pointer-events-none">
-            ✨ <i>Chạm hoặc di chuột vào từng bức ảnh để xem rõ hơn nhé!</i>
+            ✨ <i>38 khoảnh khắc kỷ niệm đang rơi lãng mạn khắp màn hình...</i>
         </div>
     </div>
 
@@ -369,44 +387,48 @@
                 modal.classList.add('hidden');
                 document.getElementById('screen-3').classList.add('hidden');
                 
-                // Mở màn hình chứa 10 ảnh
-                const photosScreen = document.getElementById('photos-screen');
-                photosScreen.classList.remove('hidden');
+                // Hiển thị màn hình ảnh rơi
+                const fallingScreen = document.getElementById('falling-photos-screen');
+                fallingScreen.classList.remove('hidden');
 
-                render10Photos();
+                startFallingPhotos();
             }, 500);
         }
 
-        // Tải chính xác 10 ảnh từ anh1.jpg đến anh10.jpg
-        function render10Photos() {
-            const grid = document.getElementById('photos-grid');
-            grid.innerHTML = '';
+        // Tạo 38 ảnh rơi chậm từ trên xuống
+        function startFallingPhotos() {
+            const container = document.getElementById('falling-container');
+            container.innerHTML = '';
 
-            const rotations = [-4, 3, -2, 5, -3, 4, -5, 2, -3, 4];
-            const delays = [0, 0.3, 0.6, 0.2, 0.5, 0.8, 0.1, 0.4, 0.7, 0.2];
+            const screenWidth = window.innerWidth;
 
-            for (let i = 1; i <= 10; i++) {
-                const card = document.createElement('div');
-                card.className = 'photo-card bg-white/10 backdrop-blur-md p-2 md:p-3 rounded-2xl border-2 border-pink-300/50 shadow-xl cursor-pointer relative';
-                
-                const rot = rotations[(i - 1) % rotations.length];
-                const delay = delays[(i - 1) % delays.length];
-                
-                card.style.setProperty('--rot', `${rot}deg`);
-                card.style.animationDelay = `${delay}s`;
+            for (let i = 1; i <= 38; i++) {
+                const img = document.createElement('img');
+                img.src = `anh${i}.jpg`;
+                img.className = 'falling-photo';
 
-                card.innerHTML = `
-                    <div class="overflow-hidden rounded-xl w-full h-36 sm:h-44 md:h-48 bg-pink-900/40 relative">
-                        <img src="anh${i}.jpg" alt="Ảnh kỷ niệm ${i}" 
-                             class="w-full h-full object-cover rounded-xl transition-all duration-300 hover:scale-110"
-                             onerror="this.src='https://images.unsplash.com/photo-1518895949257-7621c3c786d7?q=80&w=400';">
-                    </div>
-                    <p class="text-center text-xs md:text-sm font-bold text-pink-200 mt-2">
-                        Kỷ niệm ${i} ❤️
-                    </p>
-                `;
+                // Phân bổ vị trí ngang ngẫu nhiên
+                const randomX = Math.random() * (screenWidth - 150);
+                // Thời gian rơi chậm từ 12s đến 22s để tạo cảm giác lãng mạn
+                const randomDuration = Math.random() * 10 + 12;
+                // Thời gian chờ để các ảnh rơi so le nhau
+                const randomDelay = Math.random() * 15;
+                // Góc xoay ngẫu nhiên
+                const rotStart = (Math.random() - 0.5) * 30;
+                const rotEnd = rotStart + (Math.random() - 0.5) * 60;
 
-                grid.appendChild(card);
+                img.style.left = `${randomX}px`;
+                img.style.setProperty('--fall-duration', `${randomDuration}s`);
+                img.style.setProperty('--fall-delay', `${randomDelay}s`);
+                img.style.setProperty('--rot-start', `${rotStart}deg`);
+                img.style.setProperty('--rot-end', `${rotEnd}deg`);
+
+                // Fallback nếu ảnh lỗi
+                img.onerror = () => {
+                    img.style.display = 'none';
+                };
+
+                container.appendChild(img);
             }
         }
     </script>
