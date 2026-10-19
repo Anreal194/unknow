@@ -33,16 +33,15 @@
             background: radial-gradient(circle at center, #2e0835 0%, #120216 70%, #050008 100%);
         }
 
-        /* Hiệu ứng bong bóng trái tim bay */
-        @keyframes floatUp {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
-        }
-        .floating-heart {
-            position: absolute;
-            bottom: -50px;
-            animation: floatUp 8s linear infinite;
+        /* Hiệu ứng cánh hoa rơi lả tả 2D Canvas */
+        #petals-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             pointer-events: none;
+            z-index: 999;
         }
 
         /* Glow Effects */
@@ -138,6 +137,15 @@
             z-index: 1;
         }
 
+        /* Hiệu ứng xoay đĩa nhạc */
+        @keyframes spinSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .spin-disc {
+            animation: spinSlow 4s linear infinite;
+        }
+
         /* Tùy chỉnh thanh cuộn thiệp */
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-track { background: rgba(255,255,255,0.1); }
@@ -146,10 +154,19 @@
 </head>
 <body class="bg-gray-950 text-gray-800 overflow-hidden h-screen w-screen relative">
 
-    <!-- Container Bong bóng Trái tim Màn 1 & 2 -->
-    <div id="hearts-container" class="absolute inset-0 pointer-events-none z-0 overflow-hidden"></div>
+    <!-- Thẻ Audio Phát Nhạc (Đảm bảo file nhac.mp3 cùng thư mục) -->
+    <audio id="bg-music" src="nhac.mp3" loop preload="auto"></audio>
 
-    <!-- Canvas 3D Thiên Hà (Dùng xuyên suốt từ Màn 3 đến Màn 5) -->
+    <!-- Nút Bật/Tắt Nhạc Cố Định Góc Màn Hình -->
+    <button id="music-toggle-btn" onclick="toggleMusic()" class="fixed top-4 right-4 z-50 bg-white/80 hover:bg-white backdrop-blur-md p-3 rounded-full shadow-lg border border-pink-300 text-pink-600 flex items-center justify-center gap-2 transition-all btn-bounce">
+        <i id="music-icon" class="fa-solid fa-compact-disc text-xl"></i>
+        <span id="music-text" class="text-xs font-bold hidden md:inline">Phát nhạc</span>
+    </button>
+
+    <!-- Canvas Cánh Hoa Rơi Lả Tả (Xuyên suốt tất cả các màn) -->
+    <canvas id="petals-canvas"></canvas>
+
+    <!-- Canvas 3D Thiên Hà -->
     <canvas id="galaxy-canvas" class="fixed inset-0 w-full h-full z-0 opacity-0 transition-opacity duration-1000 pointer-events-none"></canvas>
 
     <!-- ==================== MÀN 1: KHỞI ĐỘNG (HỎI HÔM NAY LÀ NGÀY GÌ) ==================== -->
@@ -235,7 +252,7 @@
                     <div class="envelope-pocket"></div>
                     <div class="absolute inset-0 flex flex-col items-center justify-center z-10 text-white pointer-events-none">
                         <i class="fa-solid fa-heart text-4xl text-pink-200 animate-pulse mb-1"></i>
-                        <span class="font-extrabold text-sm tracking-wider uppercase drop-shadow">Gửi Phụ Nữ Yêu Thương</span>
+                        <span class="font-extrabold text-sm tracking-wider uppercase drop-shadow">Gửi Gia Đình Yêu Thương</span>
                     </div>
                 </div>
             </div>
@@ -251,25 +268,25 @@
             
             <div class="overflow-y-auto pr-2">
                 <div class="text-center mb-4">
-                    <i class="fa-solid fa-crown text-4xl text-pink-500 mb-2"></i>
+                    <i class="fa-solid fa-heart text-4xl text-pink-500 mb-2"></i>
                     <h2 class="text-2xl md:text-3xl font-extrabold text-pink-600 tracking-tight">
-                        GỬI NHỮNG NGƯỜI PHỤ NỮ TRONG GIA ĐÌNH ❤️
+                        GỬI GIA ĐÌNH!
                     </h2>
                     <div class="w-24 h-1 bg-pink-400 mx-auto my-3 rounded-full"></div>
                 </div>
 
                 <div class="space-y-4 text-gray-700 text-base md:text-lg leading-relaxed">
-                    <p class="font-handwriting text-2xl md:text-3xl text-pink-600 text-center">
-                        "Nhân ngày Phụ nữ Việt Nam 20/10..."
+                    <p>
+                        🫶 Hôm nay là ngày 20/10, con chúc gia đình có một ngày thật vui vẻ, không những ngày hôm nay mà còn cả những ngày phía trước.
                     </p>
                     <p>
-                        🌸 <b>Gửi Mẹ kính yêu:</b> Cảm ơn Mẹ đã luôn là điểm tựa ấm áp nhất, là người phụ nữ gia đình bao dung, tần tảo chăm sóc cho tổ ấm. Chúc Mẹ luôn bình an, nhiều sức khỏe và tràn ngập niềm vui mỗi ngày.
+                        🌷 Con chúc gia đình luôn dồi dào sức khoẻ, bình an, ngập tràn niềm vui và lúc nào cũng xinh đẹp, rạng rỡ và hạnh phúc bên gia đình nhỏ của mình.
                     </p>
                     <p>
-                        🌻 <b>Gửi Bà & Chị/Em gái/Người thân:</b> Chúc cho những người phụ nữ tuyệt vời trong gia đình ta luôn giữ vững nụ cười rạng rỡ, xinh đẹp như những bông hoa tươi thắm nhất và thành công trên mọi con đường.
+                        ❤️ Con hi vọng những điều này sẽ làm gia đình mình vui, con yêu gia đình nhiều lắm ạaa.
                     </p>
-                    <p class="text-center font-semibold text-pink-600">
-                        Cảm ơn mọi người vì đã luôn xuất hiện và làm cho cuộc sống này trở nên trọn vẹn và ngọt ngào hơn! 💕
+                    <p class="text-right font-handwriting text-2xl md:text-3xl text-pink-600 mt-6 pr-4">
+                        Kí tên: Phuongg Thuyy ✨
                     </p>
                 </div>
             </div>
@@ -284,31 +301,105 @@
     </div>
 
     <!-- ==================== MÀN 5: KHUNG ẢNH GIA ĐÌNH BAY TRONG THIÊN HÀ ==================== -->
-    <!-- (Toàn bộ các khung ảnh sẽ được 3D Three.js tạo & quay lơ lửng chậm rãi trong Canvas Thiên Hà) -->
     <div id="photo-instruction" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-20 bg-black/60 backdrop-blur-md px-6 py-3 rounded-full border border-pink-400/40 text-pink-200 text-xs md:text-sm text-center shadow-2xl animate-fade-in pointer-events-none">
-        ✨ <i>Những khoảnh khắc kỷ niệm đang bay lơ lửng trong thiên hà... (Bạn có thể dễ dàng thay link ảnh trong mã nguồn)</i>
+        ✨ <i>Những khoảnh khắc kỷ niệm đang bay lơ lửng chậm rãi trong thiên hà...</i>
     </div>
 
 
     <!-- ==================== KỊCH BẢN JAVASCRIPT ==================== -->
     <script>
-        /* ================= 1. BONG BÓNG TRÁI TIM (MAN 1 & 2) ================= */
-        function createHeart() {
-            const container = document.getElementById('hearts-container');
-            if(!container) return;
-            const heart = document.createElement('div');
-            heart.classList.add('floating-heart');
-            const icons = ['fa-heart', 'fa-sparkles', 'fa-star', 'fa-rose'];
-            heart.innerHTML = `<i class="fa-solid ${icons[Math.floor(Math.random()*icons.length)]} text-pink-300/60"></i>`;
-            heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.animationDuration = Math.random() * 4 + 6 + 's';
-            heart.style.fontSize = Math.random() * 18 + 14 + 'px';
-            container.appendChild(heart);
-            setTimeout(() => heart.remove(), 8000);
-        }
-        const heartInterval = setInterval(createHeart, 400);
+        /* ================= KÍCH HOẠT & ĐIỀU KHIỂN NHẠC NỀN ================= */
+        const bgMusic = document.getElementById('bg-music');
+        const musicIcon = document.getElementById('music-icon');
+        const musicText = document.getElementById('music-text');
+        let isMusicPlaying = false;
 
-        /* ================= 2. MÀN 1: HỎI HÔM NAY NGÀY GÌ ================= */
+        function toggleMusic() {
+            if (isMusicPlaying) {
+                bgMusic.pause();
+                musicIcon.className = "fa-solid fa-compact-disc text-xl";
+                musicText.innerText = "Bật nhạc";
+                isMusicPlaying = false;
+            } else {
+                bgMusic.play().then(() => {
+                    musicIcon.className = "fa-solid fa-compact-disc text-xl spin-disc text-pink-600";
+                    musicText.innerText = "Tắt nhạc";
+                    isMusicPlaying = true;
+                }).catch(e => console.log("Trình duyệt chặn autoplay:", e));
+            }
+        }
+
+        // Tự động phát nhạc khi người dùng có tương tác đầu tiên trên trang
+        document.body.addEventListener('click', function autoPlayFirstTime() {
+            if (!isMusicPlaying) {
+                bgMusic.play().then(() => {
+                    musicIcon.className = "fa-solid fa-compact-disc text-xl spin-disc text-pink-600";
+                    musicText.innerText = "Tắt nhạc";
+                    isMusicPlaying = true;
+                }).catch(e => {});
+            }
+        }, { once: true });
+
+
+        /* ================= HIỆU ỨNG CÁNH HOA RƠI LẢ TẢ CHẬM 2D ================= */
+        const petalsCanvas = document.getElementById('petals-canvas');
+        const pCtx = petalsCanvas.getContext('2d');
+
+        function resizePetalsCanvas() {
+            petalsCanvas.width = window.innerWidth;
+            petalsCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizePetalsCanvas);
+        resizePetalsCanvas();
+
+        const petals = [];
+        const petalCount = 35;
+
+        for (let i = 0; i < petalCount; i++) {
+            petals.push({
+                x: Math.random() * petalsCanvas.width,
+                y: Math.random() * petalsCanvas.height - petalsCanvas.height,
+                size: Math.random() * 8 + 8,
+                speedY: Math.random() * 0.6 + 0.4,
+                speedX: Math.random() * 0.8 - 0.4,
+                rotation: Math.random() * 360,
+                rotSpeed: Math.random() * 1 - 0.5,
+                opacity: Math.random() * 0.5 + 0.4,
+                color: Math.random() > 0.5 ? '#ffb6c1' : '#ff69b4'
+            });
+        }
+
+        function drawPetals() {
+            pCtx.clearRect(0, 0, petalsCanvas.width, petalsCanvas.height);
+            
+            petals.forEach(p => {
+                p.y += p.speedY;
+                p.x += Math.sin(p.y * 0.01) * 0.5 + p.speedX;
+                p.rotation += p.rotSpeed;
+
+                if (p.y > petalsCanvas.height + 20) {
+                    p.y = -20;
+                    p.x = Math.random() * petalsCanvas.width;
+                }
+
+                pCtx.save();
+                pCtx.translate(p.x, p.y);
+                pCtx.rotate((p.rotation * Math.PI) / 180);
+                pCtx.globalAlpha = p.opacity;
+                pCtx.fillStyle = p.color;
+                
+                pCtx.beginPath();
+                pCtx.ellipse(0, 0, p.size, p.size / 2, 0, 0, Math.PI * 2);
+                pCtx.fill();
+
+                pCtx.restore();
+            });
+
+            requestAnimationFrame(drawPetals);
+        }
+        drawPetals();
+
+        /* ================= MÀN 1: HỎI HÔM NAY NGÀY GÌ ================= */
         function checkScreen1(isCorrect) {
             const feedback = document.getElementById('screen1-feedback');
             if(isCorrect) {
@@ -330,7 +421,7 @@
             }
         }
 
-        /* ================= 3. MÀN 2: 5 CÂU HỎI TRẮC NGHIỆM ================= */
+        /* ================= MÀN 2: 5 CÂU HỎI TRẮC NGHIỆM ================= */
         const quizData = [
             {
                 question: "1. Ngày Phụ nữ Việt Nam 20/10 chính thức được thành lập vào năm nào?",
@@ -429,8 +520,6 @@
             if (currentQuizIndex < quizData.length) {
                 showQuestion();
             } else {
-                // Chuyển sang Màn 3
-                clearInterval(heartInterval);
                 document.getElementById('screen-2').classList.add('opacity-0');
                 setTimeout(() => {
                     document.getElementById('screen-2').classList.add('hidden');
@@ -441,19 +530,18 @@
             }
         }
 
-        /* ================= 4. THREE.JS GALAXY & MÀN 3/4/5 ================= */
+        /* ================= THREE.JS GALAXY & MÀN 3/4/5 ================= */
         let scene, camera, renderer, starParticles;
         let photoMeshes = [];
         let isZoomingOut = false;
 
-        // DANH SÁCH LINK ẢNH KỶ NIỆM GIA ĐÌNH (Dễ dàng thay đổi URL ảnh của bạn tại đây)
         const familyPhotoURLs = [
-            "https://images.unsplash.com/photo-1511895426328-dc8714191300?q=80&w=600&auto=format&fit=crop", // Ảnh gia đình 1
-            "https://images.unsplash.com/photo-1542037104857-ffbb0b9155fb?q=80&w=600&auto=format&fit=crop", // Ảnh Mẹ/Gia đình 2
-            "https://images.unsplash.com/photo-1581952976147-5a2d15560349?q=80&w=600&auto=format&fit=crop", // Ảnh kỷ niệm 3
-            "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=600&auto=format&fit=crop", // Nụ cười phụ nữ 4
-            "https://images.unsplash.com/photo-1490578474895-699cd4e2cf59?q=80&w=600&auto=format&fit=crop", // Bông hoa ấm áp 5
-            "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=600&auto=format&fit=crop"  // Tình bạn/Gia đình 6
+            "https://images.unsplash.com/photo-1511895426328-dc8714191300?q=80&w=600&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1542037104857-ffbb0b9155fb?q=80&w=600&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1581952976147-5a2d15560349?q=80&w=600&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=600&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1490578474895-699cd4e2cf59?q=80&w=600&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=600&auto=format&fit=crop"
         ];
 
         function initGalaxy3D() {
@@ -467,7 +555,6 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-            // Tạo các ngôi sao lấp lánh màu hồng/tím
             const count = 2500;
             const geometry = new THREE.BufferGeometry();
             const positions = new Float32Array(count * 3);
@@ -500,7 +587,7 @@
             starParticles = new THREE.Points(geometry, material);
             scene.add(starParticles);
 
-            window.addEventListener('resize', onWindowResize);
+            window.addEventListener('resize', onGalaxyResize);
             animateGalaxy();
         }
 
@@ -512,12 +599,10 @@
                 starParticles.rotation.x += 0.0005;
             }
 
-            // Hiệu ứng Camera Dolly Zoom Out khi bấm "Tôi đã sẵn sàng"
             if (isZoomingOut && camera.position.z < 45) {
                 camera.position.z += 0.35;
             }
 
-            // Xoay lơ lửng chậm rãi cho các khung ảnh 3D ở Màn 5
             photoMeshes.forEach((mesh) => {
                 mesh.rotation.y += mesh.userData.rotSpeedY;
                 mesh.rotation.x += mesh.userData.rotSpeedX;
@@ -527,19 +612,17 @@
             renderer.render(scene, camera);
         }
 
-        function onWindowResize() {
+        function onGalaxyResize() {
             if (!camera || !renderer) return;
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         }
 
-        // Bấm "Tôi đã sẵn sàng!" -> Thiên hà lùi xa & Lá thư bay ra
         function startGalaxyGift() {
             const readyCard = document.getElementById('ready-card');
             readyCard.classList.add('opacity-0', 'scale-95');
             
-            // Bắt đầu hiệu ứng lùi camera thiên hà
             isZoomingOut = true;
 
             setTimeout(() => {
@@ -550,7 +633,6 @@
             }, 700);
         }
 
-        // Click lá thư -> Mở nắp & Hiện Thiệp Chúc
         function openEnvelope() {
             const env = document.getElementById('envelope');
             env.classList.add('open');
@@ -564,7 +646,6 @@
             }, 700);
         }
 
-        // MÀN 5: Bấm Đóng Thư -> Xuất hiện các bức ảnh bay lơ lửng chậm rãi trong vũ trụ 3D
         function closeLetterAndShowPhotos() {
             const modal = document.getElementById('letter-modal');
             modal.classList.add('opacity-0');
@@ -574,7 +655,6 @@
                 document.getElementById('letter-container').classList.add('hidden');
                 document.getElementById('photo-instruction').classList.remove('hidden');
 
-                // Tạo các khung ảnh 3D lơ lửng trong không gian
                 createFloating3DPhotos();
             }, 500);
         }
@@ -584,7 +664,6 @@
 
             familyPhotoURLs.forEach((url, index) => {
                 textureLoader.load(url, (texture) => {
-                    // Tạo tấm hình tỉ lệ 4:3
                     const geo = new THREE.PlaneGeometry(5, 3.8);
                     const mat = new THREE.MeshBasicMaterial({
                         map: texture,
@@ -595,7 +674,6 @@
 
                     const mesh = new THREE.Mesh(geo, mat);
 
-                    // Phân bố các bức ảnh trong không gian 3D xung quanh camera
                     const angle = (index / familyPhotoURLs.length) * Math.PI * 2;
                     const radius = 18 + Math.random() * 8;
 
