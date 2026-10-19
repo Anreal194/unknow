@@ -284,7 +284,7 @@
                     <div class="w-24 h-1 bg-pink-400 mx-auto my-3 rounded-full"></div>
                 </div>
 
-                <!-- Khung chạy chữ từng ký tự -->
+                <!-- Khung chạy chữ từng ký tự mới -->
                 <div id="typing-text-container" class="space-y-4 text-gray-700 text-base md:text-lg leading-relaxed min-h-[220px]">
                     <p id="line-1" class="typing-cursor"></p>
                     <p id="line-2"></p>
@@ -383,17 +383,17 @@
                 modal.classList.remove('hidden');
                 setTimeout(() => {
                     modal.classList.remove('opacity-0');
-                    // Kích hoạt hiệu ứng đánh máy chữ
+                    // Kích hoạt hiệu ứng đánh máy chữ mới
                     startTypingEffect();
                 }, 100);
             }, 700);
         }
 
-        /* ================= HIỆU ỨNG GÕ CHỮ TỪNG KÝ TỰ ================= */
+        /* ================= HIỆU ỨNG GÕ CHỮ MỚI ================= */
         const textLines = [
-            "🫶 Hôm nay là ngày 20/10, con chúc bà ngoại, má hai, mẹ, má tư và mợ có một ngày thật vui vẻ, không những ngày hôm nay mà còn cả những ngày phía trước.",
-            "🌷 Con chúc đại gia đình mình luôn dồi dào sức khoẻ, bình an, ngập tràn niềm vui và lúc nào cũng xinh đẹp, rạng rỡ và hạnh phúc bên gia đình nhỏ của mình.",
-            "❤️ Con mong những điều nhỏ này sẽ làm đại gia đình mình vui, con yêu đại gia đình nhiều lắm ạaa.",
+            "Hôm nay là ngày 20/10, con chúc bà ngoại, má hai, mẹ, má tư và mợ có một ngày thật vui vẻ, không những ngày hôm nay mà còn cả những ngày phía trước🫶",
+            "Con chúc đại gia đình mình luôn dồi dào sức khoẻ, bình an, ngập tràn niềm vui và lúc nào cũng xinh đẹp, rạng rỡ và hạnh phúc bên gia đình nhỏ của mình🌷",
+            "Con yêu gia đình của mình nhiều lắm ạaa❤️",
             "Kí tên: Phuongg Thuyy ✨"
         ];
 
@@ -412,7 +412,7 @@
                     if (charIndex < textLines[lineIndex].length) {
                         currentP.innerHTML += textLines[lineIndex].charAt(charIndex);
                         charIndex++;
-                        setTimeout(typeWriter, 28);
+                        setTimeout(typeWriter, 26);
                     } else {
                         currentP.classList.remove('typing-cursor');
                         lineIndex++;
