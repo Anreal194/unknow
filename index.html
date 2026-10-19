@@ -271,7 +271,7 @@
         </div>
     </section>
 
-    <!-- ==================== MÀN 3: THIỆP CHẠY CHỮ TỪNG KÝ TỰ (RỐNG LÚC ĐẦU) ==================== -->
+    <!-- ==================== MÀN 3: THIỆP CHẠY CHỮ TỪNG KÝ TỰ ==================== -->
     <div id="letter-modal" class="hidden fixed inset-0 z-40 w-full h-full flex items-center justify-center p-4 bg-black/70 backdrop-blur-md transition-opacity duration-500 opacity-0">
         <div class="max-w-2xl w-full bg-gradient-to-b from-pink-50 via-white to-pink-100 p-6 md:p-10 rounded-3xl shadow-2xl border-4 border-pink-300 relative text-gray-800 my-auto max-h-[90vh] flex flex-col">
             
@@ -284,7 +284,7 @@
                     <div class="w-24 h-1 bg-pink-400 mx-auto my-3 rounded-full"></div>
                 </div>
 
-                <!-- Khung trống hoàn toàn ban đầu để chạy từng chữ -->
+                <!-- Khung chạy chữ từng ký tự -->
                 <div id="typing-text-container" class="space-y-4 text-gray-700 text-base md:text-lg leading-relaxed min-h-[220px]">
                     <p id="line-1" class="typing-cursor"></p>
                     <p id="line-2"></p>
@@ -293,7 +293,7 @@
                 </div>
             </div>
 
-            <!-- Nút Đóng Thư (Ban đầu ẩn hoàn toàn, gõ xong chữ mới hiện) -->
+            <!-- Nút Đóng Thư (Chạy xong chữ mới hiện) -->
             <div id="close-letter-btn-container" class="mt-6 pt-4 border-t border-pink-200 text-center opacity-0 transition-opacity duration-700 pointer-events-none">
                 <button onclick="closeLetterAndShowPhotos()" class="px-8 py-3 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold rounded-full shadow-lg btn-bounce flex items-center gap-2 mx-auto">
                     Đóng thư lại 💝 <i class="fa-solid fa-xmark"></i>
@@ -305,10 +305,6 @@
     <!-- ==================== MÀN 4: 38 ẢNH VỪA BAY VỪA RƠI ==================== -->
     <div id="photos-screen" class="hidden fixed inset-0 z-10 bg-romantic-night overflow-hidden">
         <div id="photos-container" class="w-full h-full relative"></div>
-
-        <div class="fixed bottom-4 left-1/2 -translate-x-1/2 z-30 bg-black/70 backdrop-blur-md px-6 py-2.5 rounded-full border border-pink-400/40 text-pink-200 text-xs md:text-sm text-center shadow-2xl pointer-events-none">
-            ✨ <i>38 khoảnh khắc kỷ niệm đang bay lượn và rơi lãng mạn khắp màn hình...</i>
-        </div>
     </div>
 
 
@@ -387,7 +383,7 @@
                 modal.classList.remove('hidden');
                 setTimeout(() => {
                     modal.classList.remove('opacity-0');
-                    // Kích hoạt chạy chữ ngay khi thư mở
+                    // Kích hoạt hiệu ứng đánh máy chữ
                     startTypingEffect();
                 }, 100);
             }, 700);
@@ -416,7 +412,7 @@
                     if (charIndex < textLines[lineIndex].length) {
                         currentP.innerHTML += textLines[lineIndex].charAt(charIndex);
                         charIndex++;
-                        setTimeout(typeWriter, 28); // Tốc độ chạy chữ từng ký tự
+                        setTimeout(typeWriter, 28);
                     } else {
                         currentP.classList.remove('typing-cursor');
                         lineIndex++;
@@ -424,11 +420,11 @@
                         if (lineIndex < textLines.length) {
                             document.getElementById(`line-${lineIndex + 1}`).classList.add('typing-cursor');
                         }
-                        setTimeout(typeWriter, 350); // Khoảng dừng giữa các đoạn
+                        setTimeout(typeWriter, 350);
                     }
                 } else {
                     isTypingDone = true;
-                    // Hiện nút Đóng thư sau khi chạy xong toàn bộ nội dung
+                    // Hiện nút Đóng thư
                     const btnContainer = document.getElementById('close-letter-btn-container');
                     btnContainer.classList.remove('opacity-0', 'pointer-events-none');
                 }
