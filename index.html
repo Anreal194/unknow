@@ -195,46 +195,14 @@
         </div>
     </section>
 
-    <!-- ==================== MÀN 2: 5 CÂU HỎI TRẮC NGHIỆM ==================== -->
-    <section id="screen-2" class="hidden relative z-10 w-full h-full flex flex-col justify-center items-center p-4 bg-pink-pink transition-all duration-700">
-        <div class="max-w-xl w-full bg-white/90 backdrop-blur-md p-6 md:p-8 rounded-3xl shadow-2xl border-4 border-pink-200 relative">
-            
-            <!-- Progress Bar -->
-            <div class="flex items-center justify-between mb-4">
-                <span id="quiz-progress-text" class="text-sm font-bold text-pink-600">Câu hỏi 1/5</span>
-                <div class="w-2/3 bg-pink-100 h-3 rounded-full overflow-hidden border border-pink-200">
-                    <div id="quiz-progress-bar" class="bg-gradient-to-r from-pink-400 to-rose-500 h-full w-1/5 transition-all duration-500"></div>
-                </div>
-            </div>
-
-            <!-- Câu hỏi -->
-            <div class="min-h-[90px] flex items-center justify-center my-3">
-                <h2 id="quiz-question" class="text-lg md:text-xl font-bold text-gray-800 text-center">
-                    Nội dung câu hỏi...
-                </h2>
-            </div>
-
-            <!-- Các lựa chọn -->
-            <div id="quiz-options" class="grid grid-cols-1 gap-3 my-3"></div>
-
-            <!-- Phản hồi -->
-            <div id="quiz-feedback" class="text-center font-bold text-sm h-8 flex items-center justify-center my-1"></div>
-
-            <!-- Nút Tiếp -->
-            <button id="btn-next-quiz" onclick="nextQuestion()" class="hidden w-full py-3 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold rounded-xl shadow-lg btn-bounce">
-                Câu tiếp theo <i class="fa-solid fa-arrow-right ml-2"></i>
-            </button>
-        </div>
-    </section>
-
-    <!-- ==================== MÀN 3: DỊCH CHUYỂN SANG THIÊN HÀ & HỎI SẴN SÀNG ==================== -->
+    <!-- ==================== MÀN 2: CHUYỂN SANG THIÊN HÀ & HỎI SẴN SÀNG ==================== -->
     <section id="screen-3" class="hidden fixed inset-0 z-10 w-full h-full flex flex-col items-center justify-center p-4 bg-galaxy transition-opacity duration-1000">
         <div id="ready-card" class="max-w-lg w-full bg-white/10 backdrop-blur-xl border border-pink-400/30 p-8 rounded-3xl shadow-2xl text-center glow-pink transition-all duration-700">
             <div class="text-5xl text-pink-300 mb-4 animate-bounce">
                 <i class="fa-solid fa-sparkles"></i>
             </div>
             <h2 class="text-2xl md:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-200 via-rose-100 to-pink-300 mb-4">
-                Chúc mừng bạn đã hoàn thành thử thách! 🎉
+                Chính xác! Chào mừng bạn đến với không gian thiên hà ✨
             </h2>
             <p class="text-lg text-pink-100 mb-8 font-medium">
                 Bạn đã sẵn sàng để nhận món quà đặc biệt chưa? 🎁✨
@@ -252,7 +220,7 @@
                     <div class="envelope-pocket"></div>
                     <div class="absolute inset-0 flex flex-col items-center justify-center z-10 text-white pointer-events-none">
                         <i class="fa-solid fa-heart text-4xl text-pink-200 animate-pulse mb-1"></i>
-                        <span class="font-extrabold text-sm tracking-wider uppercase drop-shadow">Gửi Gia Đình Yêu Thương</span>
+                        <span class="font-extrabold text-sm tracking-wider uppercase drop-shadow">Gửi Đại Gia Đình</span>
                     </div>
                 </div>
             </div>
@@ -262,7 +230,7 @@
         </div>
     </section>
 
-    <!-- ==================== MÀN 4: THIỆP LỜI CHÚC TRONG THƯ ==================== -->
+    <!-- ==================== MÀN 3: THIỆP LỜI CHÚC TRONG THƯ ==================== -->
     <div id="letter-modal" class="hidden fixed inset-0 z-30 w-full h-full flex items-center justify-center p-4 bg-black/70 backdrop-blur-md transition-opacity duration-500 opacity-0">
         <div class="max-w-2xl w-full bg-gradient-to-b from-pink-50 via-white to-pink-100 p-6 md:p-10 rounded-3xl shadow-2xl border-4 border-pink-300 relative text-gray-800 my-auto max-h-[90vh] flex flex-col">
             
@@ -270,20 +238,20 @@
                 <div class="text-center mb-4">
                     <i class="fa-solid fa-heart text-4xl text-pink-500 mb-2"></i>
                     <h2 class="text-2xl md:text-3xl font-extrabold text-pink-600 tracking-tight">
-                        GỬI GIA ĐÌNH!
+                        GỬI ĐẠI GIA ĐÌNH!
                     </h2>
                     <div class="w-24 h-1 bg-pink-400 mx-auto my-3 rounded-full"></div>
                 </div>
 
                 <div class="space-y-4 text-gray-700 text-base md:text-lg leading-relaxed">
                     <p>
-                        🫶 Hôm nay là ngày 20/10, con chúc gia đình có một ngày thật vui vẻ, không những ngày hôm nay mà còn cả những ngày phía trước.
+                        🫶 Hôm nay là ngày 20/10, con chúc bà ngoại, má hai, mẹ, má tư và mợ có một ngày thật vui vẻ, không những ngày hôm nay mà còn cả những ngày phía trước.
                     </p>
                     <p>
-                        🌷 Con chúc gia đình luôn dồi dào sức khoẻ, bình an, ngập tràn niềm vui và lúc nào cũng xinh đẹp, rạng rỡ và hạnh phúc bên gia đình nhỏ của mình.
+                        🌷 Con chúc đại gia đình mình luôn dồi dào sức khoẻ, bình an, ngập tràn niềm vui và lúc nào cũng xinh đẹp, rạng rỡ và hạnh phúc bên gia đình nhỏ của mình.
                     </p>
                     <p>
-                        ❤️ Con hi vọng những điều này sẽ làm gia đình mình vui, con yêu gia đình nhiều lắm ạaa.
+                        ❤️ Con mong những điều nhỏ này sẽ làm đại gia đình mình vui, con yêu đại gia đình nhiều lắm ạaa.
                     </p>
                     <p class="text-right font-handwriting text-2xl md:text-3xl text-pink-600 mt-6 pr-4">
                         Kí tên: Phuongg Thuyy ✨
@@ -291,7 +259,7 @@
                 </div>
             </div>
 
-            <!-- Nút Đóng Thư chuyển sang Màn 5 -->
+            <!-- Nút Đóng Thư chuyển sang Màn 4 (38 ảnh bay) -->
             <div class="mt-6 pt-4 border-t border-pink-200 text-center">
                 <button onclick="closeLetterAndShowPhotos()" class="px-8 py-3 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold rounded-full shadow-lg btn-bounce flex items-center gap-2 mx-auto">
                     Đóng thư lại 💝 <i class="fa-solid fa-xmark"></i>
@@ -300,9 +268,9 @@
         </div>
     </div>
 
-    <!-- ==================== MÀN 5: KHUNG ẢNH GIA ĐÌNH BAY TRONG THIÊN HÀ ==================== -->
+    <!-- ==================== MÀN 4: 38 ẢNH BAY LOẠN XẠ TRONG THIÊN HÀ ==================== -->
     <div id="photo-instruction" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-20 bg-black/60 backdrop-blur-md px-6 py-3 rounded-full border border-pink-400/40 text-pink-200 text-xs md:text-sm text-center shadow-2xl animate-fade-in pointer-events-none">
-        ✨ <i>Những khoảnh khắc kỷ niệm đang bay lơ lửng chậm rãi trong thiên hà...</i>
+        ✨ <i>38 khoảnh khắc kỷ niệm của đại gia đình đang bay lơ lửng khắp thiên hà...</i>
     </div>
 
 
@@ -329,7 +297,6 @@
             }
         }
 
-        // Tự động phát nhạc khi người dùng có tương tác đầu tiên trên trang
         document.body.addEventListener('click', function autoPlayFirstTime() {
             if (!isMusicPlaying) {
                 bgMusic.play().then(() => {
@@ -399,150 +366,39 @@
         }
         drawPetals();
 
-        /* ================= MÀN 1: HỎI HÔM NAY NGÀY GÌ ================= */
+        /* ================= MÀN 1: KIỂM TRA NGÀY 20/10 ================= */
         function checkScreen1(isCorrect) {
             const feedback = document.getElementById('screen1-feedback');
             if(isCorrect) {
                 feedback.classList.remove('hidden', 'text-rose-500');
                 feedback.classList.add('text-emerald-600');
-                feedback.innerText = "Chính xác rồi! Cùng tiếp tục thử thách nhé ✨";
+                feedback.innerText = "Chính xác! Đang bước vào không gian thiên hà... ✨";
                 setTimeout(() => {
                     document.getElementById('screen-1').classList.add('opacity-0');
                     setTimeout(() => {
                         document.getElementById('screen-1').classList.add('hidden');
-                        document.getElementById('screen-2').classList.remove('hidden');
-                        initQuiz();
+                        document.getElementById('screen-3').classList.remove('hidden');
+                        document.getElementById('galaxy-canvas').classList.remove('opacity-0');
+                        initGalaxy3D();
                     }, 500);
                 }, 700);
             } else {
                 feedback.classList.remove('hidden', 'text-emerald-600');
                 feedback.classList.add('text-rose-500');
-                feedback.innerText = "Chưa đúng rồi, hãy chọn lại nhé! 😜";
+                feedback.innerText = "Chưa đúng rồi, hãy chọn lại ngày 20/10 nhé! 😜";
             }
         }
 
-        /* ================= MÀN 2: 5 CÂU HỎI TRẮC NGHIỆM ================= */
-        const quizData = [
-            {
-                question: "1. Ngày Phụ nữ Việt Nam 20/10 chính thức được thành lập vào năm nào?",
-                options: ["1930", "1945", "1954", "1975"],
-                correct: 0,
-                fact: "Đúng rồi! Hội Phụ nữ Phản đế Việt Nam được thành lập ngày 20/10/1930."
-            },
-            {
-                question: "2. Tổ chức tiền thân đầu tiên của Hội Liên hiệp Phụ nữ Việt Nam là gì?",
-                options: ["Hội Phụ nữ Cứu quốc", "Hội Phụ nữ Phản đế", "Hội Phụ nữ Giải phóng", "Hội Phụ nữ Dân chủ"],
-                correct: 1,
-                fact: "Chính xác! Đó chính là Hội Phụ nữ Phản đế."
-            },
-            {
-                question: "3. Bức trướng Bác Hồ tặng phụ nữ Việt Nam mang 8 chữ vàng nào?",
-                options: ["Anh hùng, Bất khuất, Trung hậu, Đảm đang", "Xinh đẹp, Tài năng, Trung hậu, Đảm đang", "Dũng cảm, Kiên cường, Nhân ái, Đảm đang", "Anh hùng, Thông minh, Nhân ái, Tần tảo"],
-                correct: 0,
-                fact: "Tốt lắm! 8 chữ vàng là: 'Anh hùng - Bất khuất - Trung hậu - Đảm đang'."
-            },
-            {
-                question: "4. Loài hoa nào tượng trưng cho sự thuần khiết, thanh cao của Phụ nữ Việt Nam?",
-                options: ["Hoa Hồng", "Hoa Hướng Dương", "Hoa Sen", "Hoa Mai"],
-                correct: 2,
-                fact: "Đúng rồi! Hoa Sen là biểu tượng cho nét đẹp thuần khiết, kiên cường."
-            },
-            {
-                question: "5. Ai là người phụ nữ tuyệt vời nhất thế giới này?",
-                options: ["Mẹ của bạn", "Bà và các Chị/Em trong gia đình", "Tất cả phụ nữ trên thế giới", "Tất cả các ý trên! 💕"],
-                correct: 3,
-                fact: "Tuyệt vời! Tất cả người phụ nữ quanh ta đều vô cùng tuyệt vời!"
-            }
-        ];
-
-        let currentQuizIndex = 0;
-
-        function initQuiz() {
-            currentQuizIndex = 0;
-            showQuestion();
-        }
-
-        function showQuestion() {
-            const q = quizData[currentQuizIndex];
-            document.getElementById('quiz-progress-text').innerText = `Câu hỏi ${currentQuizIndex + 1}/5`;
-            document.getElementById('quiz-progress-bar').style.width = `${((currentQuizIndex + 1) / 5) * 100}%`;
-            document.getElementById('quiz-question').innerText = q.question;
-
-            const optionsContainer = document.getElementById('quiz-options');
-            optionsContainer.innerHTML = '';
-            document.getElementById('quiz-feedback').innerText = '';
-            document.getElementById('btn-next-quiz').classList.add('hidden');
-
-            q.options.forEach((opt, idx) => {
-                const btn = document.createElement('button');
-                btn.className = "w-full py-3 px-5 text-left bg-pink-50/80 hover:bg-pink-100 text-gray-800 font-semibold rounded-xl border border-pink-200 transition flex items-center justify-between btn-bounce";
-                btn.innerHTML = `<span>${String.fromCharCode(65 + idx)}. ${opt}</span> <i class="fa-regular fa-circle text-pink-300"></i>`;
-                btn.onclick = () => selectAnswer(idx, btn);
-                optionsContainer.appendChild(btn);
-            });
-        }
-
-        function selectAnswer(selectedIndex, selectedBtn) {
-            const q = quizData[currentQuizIndex];
-            const buttons = document.getElementById('quiz-options').children;
-            
-            for (let btn of buttons) {
-                btn.disabled = true;
-                btn.classList.remove('hover:bg-pink-100', 'btn-bounce');
-            }
-
-            const feedback = document.getElementById('quiz-feedback');
-
-            if (selectedIndex === q.correct) {
-                selectedBtn.classList.add('bg-emerald-100', 'border-emerald-400', 'text-emerald-800');
-                selectedBtn.querySelector('i').className = "fa-solid fa-circle-check text-emerald-500 text-lg";
-                feedback.className = "text-center font-bold text-sm text-emerald-600 my-1 animate-bounce";
-                feedback.innerText = q.fact;
-            } else {
-                selectedBtn.classList.add('bg-rose-100', 'border-rose-400', 'text-rose-800');
-                selectedBtn.querySelector('i').className = "fa-solid fa-circle-xmark text-rose-500 text-lg";
-                buttons[q.correct].classList.add('bg-emerald-100', 'border-emerald-400', 'text-emerald-800');
-                buttons[q.correct].querySelector('i').className = "fa-solid fa-circle-check text-emerald-500 text-lg";
-                feedback.className = "text-center font-bold text-sm text-rose-500 my-1";
-                feedback.innerText = "Chưa chính xác nhưng không sao nhé!";
-            }
-
-            if (currentQuizIndex < quizData.length - 1) {
-                document.getElementById('btn-next-quiz').innerText = "Câu tiếp theo";
-            } else {
-                document.getElementById('btn-next-quiz').innerText = "Chuyển tới Thiên Hà Quà Tặng 🚀";
-            }
-            document.getElementById('btn-next-quiz').classList.remove('hidden');
-        }
-
-        function nextQuestion() {
-            currentQuizIndex++;
-            if (currentQuizIndex < quizData.length) {
-                showQuestion();
-            } else {
-                document.getElementById('screen-2').classList.add('opacity-0');
-                setTimeout(() => {
-                    document.getElementById('screen-2').classList.add('hidden');
-                    document.getElementById('screen-3').classList.remove('hidden');
-                    document.getElementById('galaxy-canvas').classList.remove('opacity-0');
-                    initGalaxy3D();
-                }, 600);
-            }
-        }
-
-        /* ================= THREE.JS GALAXY & MÀN 3/4/5 ================= */
+        /* ================= THREE.JS GALAXY & 38 ẢNH TỰ ĐỘNG ================= */
         let scene, camera, renderer, starParticles;
         let photoMeshes = [];
         let isZoomingOut = false;
 
-        const familyPhotoURLs = [
-            "https://images.unsplash.com/photo-1511895426328-dc8714191300?q=80&w=600&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1542037104857-ffbb0b9155fb?q=80&w=600&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1581952976147-5a2d15560349?q=80&w=600&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=600&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1490578474895-699cd4e2cf59?q=80&w=600&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=600&auto=format&fit=crop"
-        ];
+        // Tự động tạo mảng 38 ảnh từ "1.jpg" đến "38.jpg"
+        const familyPhotoURLs = [];
+        for (let i = 1; i <= 38; i++) {
+            familyPhotoURLs.push(`${i}.jpg`);
+        }
 
         function initGalaxy3D() {
             const canvas = document.getElementById('galaxy-canvas');
@@ -555,7 +411,7 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-            const count = 2500;
+            const count = 3000;
             const geometry = new THREE.BufferGeometry();
             const positions = new Float32Array(count * 3);
             const colors = new Float32Array(count * 3);
@@ -563,9 +419,9 @@
             const palette = [new THREE.Color('#ffb6c1'), new THREE.Color('#ff69b4'), new THREE.Color('#e0b0ff'), new THREE.Color('#ffffff')];
 
             for (let i = 0; i < count; i++) {
-                positions[i * 3] = (Math.random() - 0.5) * 80;
-                positions[i * 3 + 1] = (Math.random() - 0.5) * 80;
-                positions[i * 3 + 2] = (Math.random() - 0.5) * 80;
+                positions[i * 3] = (Math.random() - 0.5) * 100;
+                positions[i * 3 + 1] = (Math.random() - 0.5) * 100;
+                positions[i * 3 + 2] = (Math.random() - 0.5) * 100;
 
                 const c = palette[Math.floor(Math.random() * palette.length)];
                 colors[i * 3] = c.r;
@@ -595,18 +451,20 @@
             requestAnimationFrame(animateGalaxy);
 
             if (starParticles) {
-                starParticles.rotation.y += 0.001;
-                starParticles.rotation.x += 0.0005;
+                starParticles.rotation.y += 0.0008;
+                starParticles.rotation.x += 0.0004;
             }
 
-            if (isZoomingOut && camera.position.z < 45) {
+            if (isZoomingOut && camera.position.z < 65) {
                 camera.position.z += 0.35;
             }
 
+            // Làm 38 bức ảnh bay lượn hỗn loạn, xoay tròn trong không gian
             photoMeshes.forEach((mesh) => {
                 mesh.rotation.y += mesh.userData.rotSpeedY;
                 mesh.rotation.x += mesh.userData.rotSpeedX;
-                mesh.position.y += Math.sin(Date.now() * 0.001 + mesh.userData.seed) * 0.005;
+                mesh.position.y += Math.sin(Date.now() * 0.001 + mesh.userData.seed) * 0.01;
+                mesh.position.x += Math.cos(Date.now() * 0.0008 + mesh.userData.seed) * 0.008;
             });
 
             renderer.render(scene, camera);
@@ -659,40 +517,51 @@
             }, 500);
         }
 
+        // Tạo 38 bức ảnh bay loạn xạ khắp thiên hà
         function createFloating3DPhotos() {
             const textureLoader = new THREE.TextureLoader();
 
             familyPhotoURLs.forEach((url, index) => {
-                textureLoader.load(url, (texture) => {
-                    const geo = new THREE.PlaneGeometry(5, 3.8);
-                    const mat = new THREE.MeshBasicMaterial({
-                        map: texture,
-                        side: THREE.DoubleSide,
-                        transparent: true,
-                        opacity: 0.95
-                    });
+                textureLoader.load(url, 
+                    (texture) => {
+                        const geo = new THREE.PlaneGeometry(4.5, 3.4);
+                        const mat = new THREE.MeshBasicMaterial({
+                            map: texture,
+                            side: THREE.DoubleSide,
+                            transparent: true,
+                            opacity: 0.95
+                        });
 
-                    const mesh = new THREE.Mesh(geo, mat);
+                        const mesh = new THREE.Mesh(geo, mat);
 
-                    const angle = (index / familyPhotoURLs.length) * Math.PI * 2;
-                    const radius = 18 + Math.random() * 8;
+                        // Phân bố rộng khắp không gian 3D
+                        const u = Math.random();
+                        const v = Math.random();
+                        const theta = u * 2.0 * Math.PI;
+                        const phi = Math.acos(2.0 * v - 1.0);
+                        const r = 15 + Math.random() * 30;
 
-                    mesh.position.x = Math.cos(angle) * radius;
-                    mesh.position.y = (Math.random() - 0.5) * 12;
-                    mesh.position.z = Math.sin(angle) * radius + 15;
+                        mesh.position.x = r * Math.sin(phi) * Math.cos(theta);
+                        mesh.position.y = r * Math.sin(phi) * Math.sin(theta);
+                        mesh.position.z = r * Math.cos(phi);
 
-                    mesh.rotation.y = -angle + Math.PI / 2;
-                    mesh.rotation.z = (Math.random() - 0.5) * 0.2;
+                        mesh.rotation.x = Math.random() * Math.PI;
+                        mesh.rotation.y = Math.random() * Math.PI;
 
-                    mesh.userData = {
-                        rotSpeedX: (Math.random() - 0.5) * 0.003,
-                        rotSpeedY: (Math.random() - 0.5) * 0.004,
-                        seed: Math.random() * 100
-                    };
+                        mesh.userData = {
+                            rotSpeedX: (Math.random() - 0.5) * 0.008,
+                            rotSpeedY: (Math.random() - 0.5) * 0.008,
+                            seed: Math.random() * 100
+                        };
 
-                    photoMeshes.push(mesh);
-                    scene.add(mesh);
-                });
+                        photoMeshes.push(mesh);
+                        scene.add(mesh);
+                    },
+                    undefined,
+                    (err) => {
+                        console.log(`Không tải được file ảnh: ${url}`, err);
+                    }
+                );
             });
         }
     </script>
