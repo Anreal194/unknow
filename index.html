@@ -133,45 +133,60 @@
             animation: spinSlow 4s linear infinite;
         }
 
-        /* Hiệu ứng ảnh bay tứ tung (ngang, dọc, lượn sóng) */
+        /* Hiệu ứng 1: Bay tứ tung (ngang, dọc, chéo) */
         @keyframes randomFloat {
+            0% { transform: translate(0px, 0px) rotate(var(--rot-1)); }
+            33% { transform: translate(var(--dx-1), var(--dy-1)) rotate(var(--rot-2)); }
+            66% { transform: translate(var(--dx-2), var(--dy-2)) rotate(var(--rot-3)); }
+            100% { transform: translate(0px, 0px) rotate(var(--rot-1)); }
+        }
+
+        /* Hiệu ứng 2: Rơi chậm từ trên xuống */
+        @keyframes slowFall {
             0% {
-                transform: translate(0px, 0px) rotate(var(--rot-1));
+                transform: translateY(-160px) rotate(var(--fall-rot-start));
+                opacity: 0;
             }
-            33% {
-                transform: translate(var(--dx-1), var(--dy-1)) rotate(var(--rot-2));
-            }
-            66% {
-                transform: translate(var(--dx-2), var(--dy-2)) rotate(var(--rot-3));
-            }
+            15% { opacity: 1; }
+            85% { opacity: 1; }
             100% {
-                transform: translate(0px, 0px) rotate(var(--rot-1));
+                transform: translateY(110vh) rotate(var(--fall-rot-end));
+                opacity: 0;
             }
         }
 
-        .drifting-photo {
+        .photo-item {
             position: absolute;
-            width: 130px;
-            height: 100px;
+            width: 120px;
+            height: 95px;
             object-fit: cover;
             border: 3px solid #ffb6c1;
             border-radius: 12px;
             box-shadow: 0 10px 25px rgba(255, 105, 180, 0.5);
-            animation: randomFloat var(--duration) ease-in-out infinite;
-            animation-delay: var(--delay);
             cursor: pointer;
             transition: transform 0.3s ease;
         }
         @media (min-width: 640px) {
-            .drifting-photo {
-                width: 170px;
-                height: 130px;
+            .photo-item {
+                width: 160px;
+                height: 120px;
             }
         }
-        .drifting-photo:hover {
-            transform: scale(1.25) rotate(0deg) !important;
+
+        .photo-item.drifting {
+            animation: randomFloat var(--duration) ease-in-out infinite;
+            animation-delay: var(--delay);
+        }
+
+        .photo-item.falling {
+            animation: slowFall var(--fall-duration) linear infinite;
+            animation-delay: var(--fall-delay);
+        }
+
+        .photo-item:hover {
+            transform: scale(1.3) rotate(0deg) !important;
             z-index: 100 !important;
-            box-shadow: 0 15px 35px rgba(255, 20, 147, 0.8);
+            box-shadow: 0 20px 40px rgba(255, 20, 147, 0.9);
             animation-play-state: paused;
         }
 
@@ -291,12 +306,12 @@
         </div>
     </div>
 
-    <!-- ==================== MÀN 4: 38 ẢNH BAY TÚ TUNG KHẮP MÀN HÌNH ==================== -->
-    <div id="drifting-photos-screen" class="hidden fixed inset-0 z-10 bg-romantic-night overflow-hidden">
-        <div id="drifting-container" class="w-full h-full relative"></div>
+    <!-- ==================== MÀN 4: 38 ẢNH VỪA BAY TÚ TUNG VỪA RƠI CHẬM ==================== -->
+    <div id="photos-screen" class="hidden fixed inset-0 z-10 bg-romantic-night overflow-hidden">
+        <div id="photos-container" class="w-full h-full relative"></div>
 
         <div class="fixed bottom-4 left-1/2 -translate-x-1/2 z-30 bg-black/70 backdrop-blur-md px-6 py-2.5 rounded-full border border-pink-400/40 text-pink-200 text-xs md:text-sm text-center shadow-2xl pointer-events-none">
-            ✨ <i>38 khoảnh khắc kỷ niệm đang bay lượn tự do khắp màn hình...</i>
+            ✨ <i>38 khoảnh khắc kỷ niệm đang bay lượn và rơi lãng mạn khắp màn hình...</i>
         </div>
     </div>
 
@@ -388,17 +403,17 @@
                 modal.classList.add('hidden');
                 document.getElementById('screen-3').classList.add('hidden');
                 
-                // Hiển thị màn hình ảnh bay
-                const driftingScreen = document.getElementById('drifting-photos-screen');
-                driftingScreen.classList.remove('hidden');
+                // Hiển thị màn hình ảnh
+                const photosScreen = document.getElementById('photos-screen');
+                photosScreen.classList.remove('hidden');
 
-                startDriftingPhotos();
+                startMixedPhotosAnimation();
             }, 500);
         }
 
-        // Tạo 38 ảnh phân bố ngẫu nhiên và bay tứ tung khắp màn hình
-        function startDriftingPhotos() {
-            const container = document.getElementById('drifting-container');
+        // Tạo 38 ảnh kết hợp cả 2 hiệu ứng: bay tứ tung và rơi chậm từ trên xuống
+        function startMixedPhotosAnimation() {
+            const container = document.getElementById('photos-container');
             container.innerHTML = '';
 
             const screenWidth = window.innerWidth;
@@ -407,36 +422,47 @@
             for (let i = 1; i <= 38; i++) {
                 const img = document.createElement('img');
                 img.src = `anh${i}.jpg`;
-                img.className = 'drifting-photo';
 
-                // Rải vị trí ban đầu ngẫu nhiên khắp màn hình (cả rộng và cao)
-                const randomX = Math.random() * (screenWidth - 180);
-                const randomY = Math.random() * (screenHeight - 180);
+                // Chia đôi: một nửa ảnh bay lượn tứ tung, một nửa ảnh rơi chậm từ trên xuống
+                if (i % 2 === 0) {
+                    img.className = 'photo-item drifting';
+                    const randomX = Math.random() * (screenWidth - 160);
+                    const randomY = Math.random() * (screenHeight - 160);
+                    const dx1 = (Math.random() - 0.5) * 220;
+                    const dy1 = (Math.random() - 0.5) * 180;
+                    const dx2 = (Math.random() - 0.5) * 220;
+                    const dy2 = (Math.random() - 0.5) * 180;
+                    const rot1 = (Math.random() - 0.5) * 20;
+                    const rot2 = rot1 + (Math.random() - 0.5) * 25;
+                    const rot3 = rot1 - (Math.random() - 0.5) * 25;
+                    const duration = Math.random() * 8 + 10;
+                    const delay = Math.random() * 5;
 
-                // Độ dịch chuyển ngẫu nhiên cho animation bay tứ tung
-                const dx1 = (Math.random() - 0.5) * 250;
-                const dy1 = (Math.random() - 0.5) * 200;
-                const dx2 = (Math.random() - 0.5) * 250;
-                const dy2 = (Math.random() - 0.5) * 200;
+                    img.style.left = `${randomX}px`;
+                    img.style.top = `${randomY}px`;
+                    img.style.setProperty('--dx-1', `${dx1}px`);
+                    img.style.setProperty('--dy-1', `${dy1}px`);
+                    img.style.setProperty('--dx-2', `${dx2}px`);
+                    img.style.setProperty('--dy-2', `${dy2}px`);
+                    img.style.setProperty('--rot-1', `${rot1}deg`);
+                    img.style.setProperty('--rot-2', `${rot2}deg`);
+                    img.style.setProperty('--rot-3', `${rot3}deg`);
+                    img.style.setProperty('--duration', `${duration}s`);
+                    img.style.setProperty('--delay', `${delay}s`);
+                } else {
+                    img.className = 'photo-item falling';
+                    const randomX = Math.random() * (screenWidth - 160);
+                    const fallDuration = Math.random() * 10 + 12;
+                    const fallDelay = Math.random() * 14;
+                    const fallRotStart = (Math.random() - 0.5) * 25;
+                    const fallRotEnd = fallRotStart + (Math.random() - 0.5) * 50;
 
-                const rot1 = (Math.random() - 0.5) * 25;
-                const rot2 = rot1 + (Math.random() - 0.5) * 30;
-                const rot3 = rot1 - (Math.random() - 0.5) * 30;
-
-                const duration = Math.random() * 8 + 10; // Từ 10s đến 18s
-                const delay = Math.random() * 5;
-
-                img.style.left = `${randomX}px`;
-                img.style.top = `${randomY}px`;
-                img.style.setProperty('--dx-1', `${dx1}px`);
-                img.style.setProperty('--dy-1', `${dy1}px`);
-                img.style.setProperty('--dx-2', `${dx2}px`);
-                img.style.setProperty('--dy-2', `${dy2}px`);
-                img.style.setProperty('--rot-1', `${rot1}deg`);
-                img.style.setProperty('--rot-2', `${rot2}deg`);
-                img.style.setProperty('--rot-3', `${rot3}deg`);
-                img.style.setProperty('--duration', `${duration}s`);
-                img.style.setProperty('--delay', `${delay}s`);
+                    img.style.left = `${randomX}px`;
+                    img.style.setProperty('--fall-duration', `${fallDuration}s`);
+                    img.style.setProperty('--fall-delay', `${fallDelay}s`);
+                    img.style.setProperty('--fall-rot-start', `${fallRotStart}deg`);
+                    img.style.setProperty('--fall-rot-end', `${fallRotEnd}deg`);
+                }
 
                 // Fallback nếu lỗi ảnh
                 img.onerror = () => {
