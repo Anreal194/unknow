@@ -133,7 +133,19 @@
             animation: spinSlow 4s linear infinite;
         }
 
-        /* Hiệu ứng 1: Bay tứ tung (ngang, dọc, chéo) */
+        /* Con trỏ nhấp nháy khi chạy chữ */
+        .typing-cursor::after {
+            content: '|';
+            animation: blink 0.8s infinite;
+            color: #ec4899;
+            font-weight: bold;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Hiệu ứng ảnh bay và rơi */
         @keyframes randomFloat {
             0% { transform: translate(0px, 0px) rotate(var(--rot-1)); }
             33% { transform: translate(var(--dx-1), var(--dy-1)) rotate(var(--rot-2)); }
@@ -141,18 +153,11 @@
             100% { transform: translate(0px, 0px) rotate(var(--rot-1)); }
         }
 
-        /* Hiệu ứng 2: Rơi chậm từ trên xuống */
         @keyframes slowFall {
-            0% {
-                transform: translateY(-160px) rotate(var(--fall-rot-start));
-                opacity: 0;
-            }
+            0% { transform: translateY(-160px) rotate(var(--fall-rot-start)); opacity: 0; }
             15% { opacity: 1; }
             85% { opacity: 1; }
-            100% {
-                transform: translateY(110vh) rotate(var(--fall-rot-end));
-                opacity: 0;
-            }
+            100% { transform: translateY(110vh) rotate(var(--fall-rot-end)); opacity: 0; }
         }
 
         .photo-item {
@@ -167,10 +172,7 @@
             transition: transform 0.3s ease;
         }
         @media (min-width: 640px) {
-            .photo-item {
-                width: 160px;
-                height: 120px;
-            }
+            .photo-item { width: 160px; height: 120px; }
         }
 
         .photo-item.drifting {
@@ -268,7 +270,7 @@
         </div>
     </section>
 
-    <!-- ==================== MÀN 3: THIỆP LỜI CHÚC TRONG THƯ ==================== -->
+    <!-- ==================== MÀN 3: THIỆP LỜI CHÚC CHẠY CHỮ TỪNG KÝ TỰ ==================== -->
     <div id="letter-modal" class="hidden fixed inset-0 z-40 w-full h-full flex items-center justify-center p-4 bg-black/70 backdrop-blur-md transition-opacity duration-500 opacity-0">
         <div class="max-w-2xl w-full bg-gradient-to-b from-pink-50 via-white to-pink-100 p-6 md:p-10 rounded-3xl shadow-2xl border-4 border-pink-300 relative text-gray-800 my-auto max-h-[90vh] flex flex-col">
             
@@ -281,24 +283,17 @@
                     <div class="w-24 h-1 bg-pink-400 mx-auto my-3 rounded-full"></div>
                 </div>
 
-                <div class="space-y-4 text-gray-700 text-base md:text-lg leading-relaxed">
-                    <p>
-                        🫶 Hôm nay là ngày 20/10, con chúc bà ngoại, má hai, mẹ, má tư và mợ có một ngày thật vui vẻ, không những ngày hôm nay mà còn cả những ngày phía trước.
-                    </p>
-                    <p>
-                        🌷 Con chúc đại gia đình mình luôn dồi dào sức khoẻ, bình an, ngập tràn niềm vui và lúc nào cũng xinh đẹp, rạng rỡ và hạnh phúc bên gia đình nhỏ của mình.
-                    </p>
-                    <p>
-                        ❤️ Con mong những điều nhỏ này sẽ làm đại gia đình mình vui, con yêu đại gia đình nhiều lắm ạaa.
-                    </p>
-                    <p class="text-right font-handwriting text-2xl md:text-3xl text-pink-600 mt-6 pr-4">
-                        Kí tên: Phuongg Thuyy ✨
-                    </p>
+                <!-- Khung chứa nội dung chạy chữ -->
+                <div id="typing-text-container" class="space-y-4 text-gray-700 text-base md:text-lg leading-relaxed min-h-[180px]">
+                    <p id="line-1" class="typing-cursor"></p>
+                    <p id="line-2"></p>
+                    <p id="line-3"></p>
+                    <p id="line-4" class="text-right font-handwriting text-2xl md:text-3xl text-pink-600 mt-6 pr-4"></p>
                 </div>
             </div>
 
-            <!-- Nút Đóng Thư -->
-            <div class="mt-6 pt-4 border-t border-pink-200 text-center">
+            <!-- Nút Đóng Thư (Ban đầu ẩn, chạy xong chữ mới hiện ra) -->
+            <div id="close-letter-btn-container" class="mt-6 pt-4 border-t border-pink-200 text-center opacity-0 transition-opacity duration-700 pointer-events-none">
                 <button onclick="closeLetterAndShowPhotos()" class="px-8 py-3 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold rounded-full shadow-lg btn-bounce flex items-center gap-2 mx-auto">
                     Đóng thư lại 💝 <i class="fa-solid fa-xmark"></i>
                 </button>
@@ -306,7 +301,7 @@
         </div>
     </div>
 
-    <!-- ==================== MÀN 4: 38 ẢNH VỪA BAY TÚ TUNG VỪA RƠI CHẬM ==================== -->
+    <!-- ==================== MÀN 4: 38 ẢNH BAY VÀ RƠI ==================== -->
     <div id="photos-screen" class="hidden fixed inset-0 z-10 bg-romantic-night overflow-hidden">
         <div id="photos-container" class="w-full h-full relative"></div>
 
@@ -391,8 +386,50 @@
                 modal.classList.remove('hidden');
                 setTimeout(() => {
                     modal.classList.remove('opacity-0');
+                    // Bắt đầu chạy hiệu ứng chữ
+                    startTypingEffect();
                 }, 50);
             }, 700);
+        }
+
+        /* ================= HIỆU ỨNG CHẠY CHỮ TỪNG KÝ TỰ ================= */
+        const textLines = [
+            "🫶 Hôm nay là ngày 20/10, con chúc bà ngoại, má hai, mẹ, má tư và mợ có một ngày thật vui vẻ, không những ngày hôm nay mà còn cả những ngày phía trước.",
+            "🌷 Con chúc đại gia đình mình luôn dồi dào sức khoẻ, bình an, ngập tràn niềm vui và lúc nào cũng xinh đẹp, rạng rỡ và hạnh phúc bên gia đình nhỏ của mình.",
+            "❤️ Con mong những điều nhỏ này sẽ làm đại gia đình mình vui, con yêu đại gia đình nhiều lắm ạaa.",
+            "Kí tên: Phuongg Thuyy ✨"
+        ];
+
+        function startTypingEffect() {
+            let lineIndex = 0;
+            let charIndex = 0;
+
+            function typeWriter() {
+                if (lineIndex < textLines.length) {
+                    const currentP = document.getElementById(`line-${lineIndex + 1}`);
+                    
+                    if (charIndex < textLines[lineIndex].length) {
+                        currentP.innerHTML += textLines[lineIndex].charAt(charIndex);
+                        charIndex++;
+                        setTimeout(typeWriter, 22); // Tốc độ chạy chữ (nhỏ hơn là nhanh hơn)
+                    } else {
+                        // Xóa con trỏ ở dòng cũ, chuyển sang dòng tiếp theo
+                        currentP.classList.remove('typing-cursor');
+                        lineIndex++;
+                        charIndex = 0;
+                        if (lineIndex < textLines.length) {
+                            document.getElementById(`line-${lineIndex + 1}`).classList.add('typing-cursor');
+                        }
+                        setTimeout(typeWriter, 300); // Khoảng nghỉ ngắn giữa các đoạn
+                    }
+                } else {
+                    // Chạy xong hết chữ thì hiện nút đóng thư lên
+                    const btnContainer = document.getElementById('close-letter-btn-container');
+                    btnContainer.classList.remove('opacity-0', 'pointer-events-none');
+                }
+            }
+
+            typeWriter();
         }
 
         function closeLetterAndShowPhotos() {
@@ -411,7 +448,7 @@
             }, 500);
         }
 
-        // Tạo 38 ảnh kết hợp cả 2 hiệu ứng: bay tứ tung và rơi chậm từ trên xuống
+        // Tạo 38 ảnh kết hợp bay và rơi
         function startMixedPhotosAnimation() {
             const container = document.getElementById('photos-container');
             container.innerHTML = '';
@@ -423,7 +460,6 @@
                 const img = document.createElement('img');
                 img.src = `anh${i}.jpg`;
 
-                // Chia đôi: một nửa ảnh bay lượn tứ tung, một nửa ảnh rơi chậm từ trên xuống
                 if (i % 2 === 0) {
                     img.className = 'photo-item drifting';
                     const randomX = Math.random() * (screenWidth - 160);
@@ -464,7 +500,6 @@
                     img.style.setProperty('--fall-rot-end', `${fallRotEnd}deg`);
                 }
 
-                // Fallback nếu lỗi ảnh
                 img.onerror = () => {
                     img.style.display = 'none';
                 };
